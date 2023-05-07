@@ -26,7 +26,10 @@ class RecyclerViewAdapter(private val mContext: Context, data: List<String>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mData[position]
-        holder.binding.textView.setText(item)
+        holder.binding.wordTextview
+        holder.binding.translationTextview
+        holder.binding.genderTextview
+        holder.binding.partOfSpeechTextview
     }
 
     override fun getItemCount(): Int {
