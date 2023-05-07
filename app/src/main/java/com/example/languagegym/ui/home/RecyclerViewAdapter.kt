@@ -1,35 +1,35 @@
 package com.example.languagegym.ui.home
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.languagegym.data.Word
 import com.example.languagegym.databinding.RecyclerviewItemBinding
 
 
-class RecyclerViewAdapter(private val mContext: Context, data: List<String>) :
+class RecyclerViewAdapter(private val mContext: Context, private val mData: MutableList<Word>) :
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
-    private val mData: List<String>
+
     private val mInflater: LayoutInflater = LayoutInflater.from(mContext)
     private var mClickListener: ItemClickListener? = null
 
-    init {
-        mData = data
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: RecyclerviewItemBinding =
             RecyclerviewItemBinding.inflate(mInflater, parent, false)
+        Log.d("RecyclerViewAdapter", "onCreateViewHolder: called")
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mData[position]
-        holder.binding.wordTextview
-        holder.binding.translationTextview
-        holder.binding.genderTextview
-        holder.binding.partOfSpeechTextview
+        holder.binding.wordTextview.text = item.word
+        holder.binding.translationTextview.text = item.translation
+        holder.binding.genderTextview.text = item.gender
+        holder.binding.partOfSpeechTextview.text = item.partOfSpeech
     }
 
     override fun getItemCount(): Int {
@@ -37,12 +37,12 @@ class RecyclerViewAdapter(private val mContext: Context, data: List<String>) :
     }
 
     inner class ViewHolder internal constructor(binding: RecyclerviewItemBinding) :
-        RecyclerView.ViewHolder(binding.getRoot()), View.OnClickListener {
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
         var binding: RecyclerviewItemBinding
 
         init {
             this.binding = binding
-            binding.getRoot().setOnClickListener(this)
+            binding.root.setOnClickListener(this)
         }
 
         override fun onClick(view: View) {
@@ -50,8 +50,8 @@ class RecyclerViewAdapter(private val mContext: Context, data: List<String>) :
         }
     }
 
-    fun getItem(id: Int): String {
-        return mData[id]
+    fun getItem(id: Int): Word? {
+        return if (id in 0 until mData.size) mData[id] else null
     }
 
     fun setClickListener(itemClickListener: ItemClickListener?) {
