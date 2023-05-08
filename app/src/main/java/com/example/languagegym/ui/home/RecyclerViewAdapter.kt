@@ -30,6 +30,13 @@ class RecyclerViewAdapter(private val mContext: Context, private val mData: Muta
         holder.binding.translationTextview.text = item.translation
         holder.binding.genderTextview.text = item.gender
         holder.binding.partOfSpeechTextview.text = item.partOfSpeech
+        if (item.imageUrl != null){
+            //todo make realization
+            holder.binding.wordImage.setImageResource(android.R.drawable.presence_invisible)
+        } else {
+            holder.binding.wordImage.setImageResource(android.R.drawable.presence_invisible)
+        }
+        holder.binding.progressBar.progress = item.learningProgress
     }
 
     override fun getItemCount(): Int {

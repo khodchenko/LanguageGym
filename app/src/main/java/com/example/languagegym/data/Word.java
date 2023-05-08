@@ -1,5 +1,9 @@
 package com.example.languagegym.data;
 
+import android.widget.ImageView;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class Word {
@@ -10,13 +14,18 @@ public class Word {
     private List<String> declension;
     private List<String> synonyms;
 
-    public Word(String word, String translation, String partOfSpeech, String gender, List<String> declension, List<String> synonyms) {
+    private final ImageView imageUrl;
+    public final int learningProgress;
+
+    public Word(String word, String translation, String partOfSpeech, String gender, List<String> declension, List<String> synonyms, ImageView imageUrl, int learningProgress) {
         this.word = word;
         this.translation = translation;
         this.partOfSpeech = partOfSpeech;
         this.gender = gender;
         this.declension = declension;
         this.synonyms = synonyms;
+        this.imageUrl = imageUrl;
+        this.learningProgress = learningProgress;
     }
 
     public String getWord() {
@@ -49,6 +58,11 @@ public class Word {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    @NotNull
+    public ImageView getImageUrl() {
+        return imageUrl;
     }
 
     public List<String> getDeclension() {

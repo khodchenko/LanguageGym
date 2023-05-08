@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,7 +38,9 @@ class HomeFragment : Fragment() {
                 "Part of speech $i",
                 "Gender $i",
                 listOf("Declension 1 $i", "Declension 2 $i"),
-                listOf("Synonym 1 $i", "Synonym 2 $i")
+                listOf("Synonym 1 $i", "Synonym 2 $i"),
+                null,
+                50
             )
             words.add(word)
         }
