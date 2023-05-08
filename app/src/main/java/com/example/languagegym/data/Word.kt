@@ -1,83 +1,49 @@
-package com.example.languagegym.data;
+package com.example.languagegym.data
 
-import android.widget.ImageView;
+import android.os.Parcel
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parceler
 
-import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+@Parcelize
+data class Word(
+    var word: String,
+    var translation: String,
+    var partOfSpeech: String,
+    var gender: String,
+    var declension: List<String>,
+    var synonyms: List<String>,
+    val imageUrl: String?,
+    val learningProgress: Int
+): Parcelable {
+    companion object : Parceler<Word> {
 
-public class Word {
-    private String word;
-    private String translation;
-    private String partOfSpeech;
-    private String gender;
-    private List<String> declension;
-    private List<String> synonyms;
+        override fun Word.write(dest: Parcel, flags: Int) {
+            dest.writeString(word)
+            dest.writeString(translation)
+            dest.writeString(partOfSpeech)
+            dest.writeString(gender)
+            dest.writeStringList(declension)
+            dest.writeStringList(synonyms)
+            dest.writeString(imageUrl)
+            dest.writeInt(learningProgress)
+        }
 
-    private final ImageView imageUrl;
-    public final int learningProgress;
-
-    public Word(String word, String translation, String partOfSpeech, String gender, List<String> declension, List<String> synonyms, ImageView imageUrl, int learningProgress) {
-        this.word = word;
-        this.translation = translation;
-        this.partOfSpeech = partOfSpeech;
-        this.gender = gender;
-        this.declension = declension;
-        this.synonyms = synonyms;
-        this.imageUrl = imageUrl;
-        this.learningProgress = learningProgress;
+        override fun create(parcel: Parcel): Word {
+            return Word(parcel)
+        }
     }
 
-    public String getWord() {
-        return word;
-    }
+    constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.createStringArrayList()!!,
+        parcel.createStringArrayList()!!,
+        parcel.readString(),
+        parcel.readInt()
+    )
 
-    public void setWord(String word) {
-        this.word = word;
-    }
-
-    public String getTranslation() {
-        return translation;
-    }
-
-    public void setTranslation(String translation) {
-        this.translation = translation;
-    }
-
-    public String getPartOfSpeech() {
-        return partOfSpeech;
-    }
-
-    public void setPartOfSpeech(String partOfSpeech) {
-        this.partOfSpeech = partOfSpeech;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    @NotNull
-    public ImageView getImageUrl() {
-        return imageUrl;
-    }
-
-    public List<String> getDeclension() {
-        return declension;
-    }
-
-    public void setDeclension(List<String> declension) {
-        this.declension = declension;
-    }
-
-    public List<String> getSynonyms() {
-        return synonyms;
-    }
-
-    public void setSynonyms(List<String> synonyms) {
-        this.synonyms = synonyms;
-    }
 }

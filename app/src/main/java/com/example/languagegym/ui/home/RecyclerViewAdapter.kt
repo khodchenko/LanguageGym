@@ -16,11 +16,8 @@ class RecyclerViewAdapter(private val mContext: Context, private val mData: Muta
     private val mInflater: LayoutInflater = LayoutInflater.from(mContext)
     private var mClickListener: ItemClickListener? = null
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding: RecyclerviewItemBinding =
-            RecyclerviewItemBinding.inflate(mInflater, parent, false)
-        Log.d("RecyclerViewAdapter", "onCreateViewHolder: called")
+        val binding: RecyclerviewItemBinding = RecyclerviewItemBinding.inflate(mInflater, parent, false)
         return ViewHolder(binding)
     }
 
@@ -36,26 +33,17 @@ class RecyclerViewAdapter(private val mContext: Context, private val mData: Muta
         } else {
             holder.binding.wordImage.setImageResource(android.R.drawable.presence_invisible)
         }
-        holder.binding.progressBar.progress = item.learningProgress
+        holder.binding.progressBarLearning.progress = item.learningProgress
+        holder.binding.root.setOnClickListener {
+            mClickListener?.onItemClick(holder.bindingAdapterPosition)
+        }
     }
 
     override fun getItemCount(): Int {
         return mData.size
     }
 
-    inner class ViewHolder internal constructor(binding: RecyclerviewItemBinding) :
-        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
-        var binding: RecyclerviewItemBinding
-
-        init {
-            this.binding = binding
-            binding.root.setOnClickListener(this)
-        }
-
-        override fun onClick(view: View) {
-            if (mClickListener != null) mClickListener!!.onItemClick(view, adapterPosition)
-        }
-    }
+    inner class ViewHolder internal constructor(val binding: RecyclerviewItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     fun getItem(id: Int): Word? {
         return if (id in 0 until mData.size) mData[id] else null
@@ -66,6 +54,6 @@ class RecyclerViewAdapter(private val mContext: Context, private val mData: Muta
     }
 
     interface ItemClickListener {
-        fun onItemClick(view: View?, position: Int)
+        fun onItemClick(position: Int)
     }
 }

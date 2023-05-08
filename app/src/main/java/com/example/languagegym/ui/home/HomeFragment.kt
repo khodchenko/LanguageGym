@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.languagegym.R
 import com.example.languagegym.data.Word
 import com.example.languagegym.databinding.FragmentHomeBinding
 
@@ -18,6 +19,16 @@ class HomeFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private fun showDetails(word: Word) {
+        val detailsFragment = DetailsFragment()
+        val bundle = Bundle()
+        bundle.putParcelable("word", word)
+        detailsFragment.arguments = bundle
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.nav_host_fragment_content_main, detailsFragment)
+            .addToBackStack(null)
+            .commit()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,10 +55,17 @@ class HomeFragment : Fragment() {
             )
             words.add(word)
         }
-        val recyclerView : RecyclerView = binding.recyclerView
+        val recyclerView: RecyclerView = binding.recyclerView
         val layoutManager = LinearLayoutManager(requireContext())
+        val adapter = RecyclerViewAdapter(requireContext(), words)
+        adapter.setClickListener(object : RecyclerViewAdapter.ItemClickListener {
+            override fun onItemClick(position: Int) {
+                showDetails(words[position])
+            }
+        })
+        recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = RecyclerViewAdapter(requireContext(), words)
+
 //        val textView: TextView = binding.textHome
 //        homeViewModel.text.observe(viewLifecycleOwner) {
 //            textView.text = it
