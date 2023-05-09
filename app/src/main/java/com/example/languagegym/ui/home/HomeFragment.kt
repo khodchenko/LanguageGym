@@ -4,77 +4,118 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.languagegym.R
-import com.example.languagegym.data.Word
+import com.example.languagegym.data.DictionaryDatabaseHelper
+import com.example.languagegym.data.WordModel
+import com.example.languagegym.databinding.DialogAddWordBinding
 import com.example.languagegym.databinding.FragmentHomeBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: RecyclerViewAdapter
+    private lateinit var databaseHelper: DictionaryDatabaseHelper
+    private lateinit var fab: FloatingActionButton
     private val binding get() = _binding!!
-    private fun showDetails(word: Word) {
-        val detailsFragment = DetailsFragment()
-        val bundle = Bundle()
-        bundle.putParcelable("word", word)
-        detailsFragment.arguments = bundle
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.nav_host_fragment_content_main, detailsFragment)
-            .addToBackStack(null)
-            .commit()
-    }
+
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
+    ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        recyclerView = binding.recyclerView
+        fab = binding.fab
+        fab.hide()
+        return binding.root
+    }
 
-        val words = mutableListOf<Word>()
-        for (i in 1..50) {
-            val word = Word(
-                "Word $i",
-                "Translation $i",
-                "Part of speech $i",
-                "Gender $i",
-                listOf("Declension 1 $i", "Declension 2 $i"),
-                listOf("Synonym 1 $i", "Synonym 2 $i"),
-                null,
-                50
-            )
-            words.add(word)
-        }
-        val recyclerView: RecyclerView = binding.recyclerView
-        val layoutManager = LinearLayoutManager(requireContext())
-        val adapter = RecyclerViewAdapter(requireContext(), words)
-        adapter.setClickListener(object : RecyclerViewAdapter.ItemClickListener {
-            override fun onItemClick(position: Int) {
-                showDetails(words[position])
-            }
-        })
+    override fun onResume() {
+        super.onResume()
+        // создаем экземпляр DictionaryDatabaseHelper
+        databaseHelper = DictionaryDatabaseHelper(requireContext())
+
+        // получаем список слов из базы данных
+        val words = databaseHelper.getAllWords()
+
+        // создаем адаптер для RecyclerView
+        adapter = RecyclerViewAdapter(words, onWordItemClickListener)
+
+        // устанавливаем адаптер в RecyclerView
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = layoutManager
 
-//        val textView: TextView = binding.textHome
-//        homeViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
-        return root
+
+        // делаем FloatingActionButton активной
+        fab.show()
+        fab.setOnClickListener {
+            showAddWordDialog()
+        }
+    }
+
+    private fun showAddWordDialog() {
+        val dialogBinding = DialogAddWordBinding.inflate(layoutInflater)
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(dialogBinding.root)
+        builder.setTitle("Add Word")
+
+        builder.setPositiveButton("Add") { dialog, _ ->
+            val word = dialogBinding.editTextWord.text.toString()
+            val translation = dialogBinding.editTextTranslation.text.toString()
+            val partOfSpeech = dialogBinding.editTextPartOfSpeech.text.toString()
+            val gender = dialogBinding.editTextGender.text.toString()
+            val declension = dialogBinding.editTextDeclension.text.toString().split(",")
+            val synonyms = dialogBinding.editTextSynonyms.text.toString().split(",")
+            val imageUrl = dialogBinding.editTextImageUrl.text.toString()
+
+            val newWord = WordModel(
+                word = word,
+                translation = translation,
+                partOfSpeech = partOfSpeech,
+                gender = gender,
+                declension = declension,
+                synonyms = synonyms,
+                imageUrl = imageUrl
+            )
+
+            val db = DictionaryDatabaseHelper(requireContext())
+            db.insertWord(newWord)
+            updateRecyclerView(db.getAllWords())
+
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.create().show()
+    }
+
+    private fun updateRecyclerView(allWords: List<WordModel>) {
+        adapter.updateData(allWords)
+    }
+
+    private val onWordItemClickListener = object : RecyclerViewAdapter.OnWordItemClickListener {
+        override fun onWordItemClick(word: WordModel) {
+            // Обработка события клика на элементе списка
+        }
+
+        override fun onWordItemDeleteClick(word: WordModel) {
+            // Обработка события удаления элемента списка
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        databaseHelper.close()
         _binding = null
     }
+
 }

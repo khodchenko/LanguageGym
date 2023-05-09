@@ -1,59 +1,63 @@
 package com.example.languagegym.ui.home
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.languagegym.data.Word
+import com.example.languagegym.data.WordModel
 import com.example.languagegym.databinding.RecyclerviewItemBinding
 
+class RecyclerViewAdapter(
+    private var words: List<WordModel>,
+    private val listener: OnWordItemClickListener
+) : RecyclerView.Adapter<RecyclerViewAdapter.WordViewHolder>() {
 
-class RecyclerViewAdapter(private val mContext: Context, private val mData: MutableList<Word>) :
-    RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
-
-    private val mInflater: LayoutInflater = LayoutInflater.from(mContext)
-    private var mClickListener: ItemClickListener? = null
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding: RecyclerviewItemBinding = RecyclerviewItemBinding.inflate(mInflater, parent, false)
-        return ViewHolder(binding)
+    interface OnWordItemClickListener {
+        fun onWordItemClick(word: WordModel)
+        fun onWordItemDeleteClick(word: WordModel)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = mData[position]
-        holder.binding.wordTextview.text = item.word
-        holder.binding.translationTextview.text = item.translation
-        holder.binding.genderTextview.text = item.gender
-        holder.binding.partOfSpeechTextview.text = item.partOfSpeech
-        if (item.imageUrl != null){
-            //todo make realization
-            holder.binding.wordImage.setImageResource(android.R.drawable.presence_invisible)
-        } else {
-            holder.binding.wordImage.setImageResource(android.R.drawable.presence_invisible)
-        }
-        holder.binding.progressBarLearning.progress = item.learningProgress
-        holder.binding.root.setOnClickListener {
-            mClickListener?.onItemClick(holder.bindingAdapterPosition)
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
+        val binding = RecyclerviewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return WordViewHolder(binding, listener)
+    }
+
+    override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
+        val word = words[position]
+        holder.bind(word)
     }
 
     override fun getItemCount(): Int {
-        return mData.size
+        return words.size
+    }
+    fun updateData(words: List<WordModel>) {
+        this.words = words
+        notifyDataSetChanged()
     }
 
-    inner class ViewHolder internal constructor(val binding: RecyclerviewItemBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class WordViewHolder(
+        private val binding: RecyclerviewItemBinding,
+        private val listener: OnWordItemClickListener
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun getItem(id: Int): Word? {
-        return if (id in 0 until mData.size) mData[id] else null
-    }
+        init {
+            binding.root.setOnClickListener {
+                listener.onWordItemClick(words[adapterPosition])
+            }
 
-    fun setClickListener(itemClickListener: ItemClickListener?) {
-        mClickListener = itemClickListener
-    }
+//            binding.deleteButton.setOnClickListener {
+//                listener.onWordItemDeleteClick(words[adapterPosition])
+//            }
+        }
 
-    interface ItemClickListener {
-        fun onItemClick(position: Int)
+        fun bind(word: WordModel) {
+            binding.wordTextview.text = word.word
+            binding.translationTextview.text = word.translation
+            binding.partOfSpeechTextview.text = word.partOfSpeech
+            binding.genderTextview.text = word.gender
+            binding.progressBarLearning.progress = word.learningProgress
+            binding.imageView3.setOnClickListener {
+                // Implement text-to-speech functionality here
+            }
+        }
     }
 }
