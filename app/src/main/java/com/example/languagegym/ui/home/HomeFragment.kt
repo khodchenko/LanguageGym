@@ -1,18 +1,25 @@
 package com.example.languagegym.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.languagegym.R
 import com.example.languagegym.data.DictionaryDatabaseHelper
 import com.example.languagegym.data.WordModel
 import com.example.languagegym.databinding.DialogAddWordBinding
 import com.example.languagegym.databinding.FragmentHomeBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment() {
 
@@ -22,6 +29,7 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: RecyclerViewAdapter
     private lateinit var databaseHelper: DictionaryDatabaseHelper
     private lateinit var fab: FloatingActionButton
+    private lateinit var loadingIndicator: ProgressBar
     private val binding get() = _binding!!
 
 
@@ -31,31 +39,49 @@ class HomeFragment : Fragment() {
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        loadingIndicator = binding.progressBar
         fab = binding.fab
         fab.hide()
-        return binding.root
-    }
 
-    override fun onResume() {
-        super.onResume()
         // создаем экземпляр DictionaryDatabaseHelper
         databaseHelper = DictionaryDatabaseHelper(requireContext())
 
-        // получаем список слов из базы данных
-        val words = databaseHelper.getAllWords()
-
-        // создаем адаптер для RecyclerView
-        adapter = RecyclerViewAdapter(words, onWordItemClickListener)
-
-        // устанавливаем адаптер в RecyclerView
-        recyclerView.adapter = adapter
+        // показываем индикатор загрузки
+        showLoadingIndicator()
 
 
-        // делаем FloatingActionButton активной
-        fab.show()
-        fab.setOnClickListener {
-            showAddWordDialog()
+
+        return binding.root
+    }
+
+
+    private fun showLoadingIndicator() {
+        loadingIndicator.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingIndicator() {
+        loadingIndicator.visibility = View.GONE
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+   // запускаем загрузку списка в отдельном потоке
+        GlobalScope.launch(Dispatchers.IO) {
+            val words = databaseHelper.getAllWords()
+            withContext(Dispatchers.Main) {
+
+
+                // инициализируем RecyclerView
+                setupRecyclerView(words)
+                // скрываем индикатор загрузки
+                hideLoadingIndicator()
+                // делаем FloatingActionButton активной
+                fab.show()
+            }
         }
+
     }
 
     private fun showAddWordDialog() {
@@ -75,17 +101,29 @@ class HomeFragment : Fragment() {
             val imageUrl = dialogBinding.editTextImageUrl.text.toString()
 
             val newWord = WordModel(
+                id = 0,
                 word = word,
                 translation = translation,
                 partOfSpeech = partOfSpeech,
                 gender = gender,
                 declension = declension,
                 synonyms = synonyms,
-                imageUrl = imageUrl
+                imageUrl = imageUrl,
+                learningProgress = 0
             )
 
             val db = DictionaryDatabaseHelper(requireContext())
+            if (word.isEmpty()) {
+                Toast.makeText(requireContext(), "Word field is empty", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+
             db.insertWord(newWord)
+
+            val allWords = db.getAllWords()
+            Log.d("Add Word", "New Word: $newWord")
+            Log.d("Add Word", "All Words: $allWords")
+
             updateRecyclerView(db.getAllWords())
 
             dialog.dismiss()
@@ -98,10 +136,6 @@ class HomeFragment : Fragment() {
         builder.create().show()
     }
 
-    private fun updateRecyclerView(allWords: List<WordModel>) {
-        adapter.updateData(allWords)
-    }
-
     private val onWordItemClickListener = object : RecyclerViewAdapter.OnWordItemClickListener {
         override fun onWordItemClick(word: WordModel) {
             // Обработка события клика на элементе списка
@@ -110,6 +144,54 @@ class HomeFragment : Fragment() {
         override fun onWordItemDeleteClick(word: WordModel) {
             // Обработка события удаления элемента списка
         }
+    }
+
+    private fun setupRecyclerView(words: List<WordModel>) {
+
+        // Создаем список слов и добавляем в него первые три начальных слова
+        val wordList = mutableListOf<WordModel>()
+        wordList.add(
+            WordModel(
+                word = "яблоко",
+                translation = "apple"
+            )
+        )
+        wordList.add(
+            WordModel(
+                word = "banana",
+                translation = "банан"
+            )
+        )
+        wordList.add(
+            WordModel(
+                word = "cat",
+                translation = "кот"
+            )
+        )
+        // создаем адаптер для RecyclerView
+        val adapter = RecyclerViewAdapter(requireContext(), words, object : RecyclerViewAdapter.OnWordItemClickListener {
+            override fun onWordItemClick(word: WordModel) {
+                // todo implementation
+            }
+
+            override fun onWordItemDeleteClick(word: WordModel) {
+                // todo implementation
+            }
+        })
+        // устанавливаем адаптер в RecyclerView
+        recyclerView.adapter = adapter
+
+        fab.setOnClickListener {
+            showAddWordDialog()
+        }
+    }
+
+    private fun updateRecyclerView(allWords: List<WordModel>) {
+        // обновляем данные в адаптере
+        adapter.updateData(allWords)
+
+        // инициализируем RecyclerView
+        setupRecyclerView(allWords)
     }
 
     override fun onDestroyView() {
