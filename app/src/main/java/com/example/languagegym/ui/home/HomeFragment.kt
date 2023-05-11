@@ -8,9 +8,12 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.languagegym.R
 import com.example.languagegym.data.DictionaryDatabaseHelper
 import com.example.languagegym.data.WordModel
 import com.example.languagegym.databinding.DialogAddWordBinding
@@ -147,31 +150,16 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView(words: List<WordModel>) {
-
-        // Создаем список слов и добавляем в него первые три начальных слова
-        val wordList = mutableListOf<WordModel>()
-        wordList.add(
-            WordModel(
-                word = "яблоко",
-                translation = "apple"
-            )
-        )
-        wordList.add(
-            WordModel(
-                word = "banana",
-                translation = "банан"
-            )
-        )
-        wordList.add(
-            WordModel(
-                word = "cat",
-                translation = "кот"
-            )
-        )
         // создаем адаптер для RecyclerView
         val adapter = RecyclerViewAdapter(requireContext(), words, object : RecyclerViewAdapter.OnWordItemClickListener {
+
             override fun onWordItemClick(word: WordModel) {
-                // todo implementation
+                //todo remake and use SafeArgs
+                val bundle = Bundle().apply {
+                    putParcelable("word", word)
+                }
+                findNavController().navigate(R.id.action_nav_home_to_detailsFragment, bundle)
+
             }
 
             override fun onWordItemDeleteClick(word: WordModel) {

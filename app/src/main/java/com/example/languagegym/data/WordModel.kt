@@ -3,7 +3,8 @@ package com.example.languagegym.data
 import android.content.ContentValues
 import android.database.Cursor
 import android.provider.BaseColumns
-
+import android.os.Parcel
+import android.os.Parcelable
 
 class WordModel(
     var id: Long = -1,
@@ -15,7 +16,44 @@ class WordModel(
     var synonyms: List<String> = emptyList(),
     var imageUrl: String = "",
     var learningProgress: Int = 0
-) {
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readLong(),
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.createStringArrayList() ?: emptyList(),
+        parcel.createStringArrayList() ?: emptyList(),
+        parcel.readString() ?: "",
+        parcel.readInt()
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeLong(id)
+        parcel.writeString(word)
+        parcel.writeString(translation)
+        parcel.writeString(partOfSpeech)
+        parcel.writeString(gender)
+        parcel.writeStringList(declension)
+        parcel.writeStringList(synonyms)
+        parcel.writeString(imageUrl)
+        parcel.writeInt(learningProgress)
+    }
+
+    companion object CREATOR : Parcelable.Creator<WordModel> {
+        override fun createFromParcel(parcel: Parcel): WordModel {
+            return WordModel(parcel)
+        }
+
+        override fun newArray(size: Int): Array<WordModel?> {
+            return arrayOfNulls(size)
+        }
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
 
     constructor(cursor: Cursor) : this(
         id = cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID)),
