@@ -1,9 +1,12 @@
 package com.example.languagegym.ui.home
 
 import android.content.Context
+import android.graphics.Color
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.languagegym.R
 import com.example.languagegym.data.WordModel
 import com.example.languagegym.databinding.RecyclerviewItemBinding
 
@@ -56,10 +59,24 @@ class RecyclerViewAdapter(
             binding.partOfSpeechTextview.text = word.partOfSpeech
             binding.genderTextview.text = word.gender
             binding.progressBarLearning.progress = word.learningProgress
+            if (word.imageUrl == "") {
+                binding.wordImage.setImageResource(R.drawable.ic_error)
+                binding.wordImage.setColorFilter(Color.GRAY)
+            } else {
+                binding.wordImage.setImageURI(stringToUri(word.imageUrl))
+            }
             //todo implementation
 //            binding.imageViewVoice.setOnClickListener {
 //                // Implement text-to-speech functionality here
 //            }
+        }
+    }
+
+    private fun stringToUri(imageUrl: String): Uri? {
+        return try {
+            Uri.parse(imageUrl)
+        } catch (e: Exception) {
+            null
         }
     }
 }

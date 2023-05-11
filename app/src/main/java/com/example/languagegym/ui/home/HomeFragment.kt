@@ -107,7 +107,7 @@ class HomeFragment : Fragment() {
                 gender = gender,
                 declension = declension,
                 synonyms = synonyms,
-                imageUrl = imageUrl,
+                imageUrl = (imageUrl ?: R.drawable.ic_error) as String,
                 learningProgress = 0
             )
 
