@@ -17,7 +17,11 @@
     <string name="translation_textview">translation_textview</string>
     <string name="part_of_speech_textview">pos_textview</string>
     <string name="gender_textview">gender_textview</string>
-    <string name="declension" />
-    <string name="synonyms" />
+    <string name="declension_textview">declension_textview</string>
+    <string name="synonyms_textview">synonyms_textview</string>
+    <string name="word_image_content_description">word_image_content_description</string>
+    <string name="edit_word">Edit word</string>
+    <string name="delete_word">Delete word</string>
+    <string name="edit_words_detail_information_of_delete_word">Edit words detail information of delete word.</string>
 
 </resources>

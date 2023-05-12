@@ -33,8 +33,6 @@ class HomeFragment : Fragment() {
     private lateinit var fab: FloatingActionButton
     private lateinit var loadingIndicator: ProgressBar
     private val binding get() = _binding!!
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -146,7 +144,7 @@ class HomeFragment : Fragment() {
             }
 
             override fun onWordItemDeleteClick(word: WordModel) {
-                // todo implementation
+                //todo implementation
             }
         })
         recyclerView.adapter = adapter

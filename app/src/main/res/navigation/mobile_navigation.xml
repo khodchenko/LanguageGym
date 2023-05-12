@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_nav_home_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
+            app:destination="@id/nav_details" />
     </fragment>
 
     <fragment
@@ -27,8 +27,9 @@
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
     <fragment
-        android:id="@+id/detailsFragment"
+        android:id="@+id/nav_details"
         android:name="com.example.languagegym.ui.home.DetailsFragment"
-        android:label="DetailsFragment" />
+        android:label="DetailsFragment"
+        tools:layout="@layout/fragment_details"/>
 
 </navigation>

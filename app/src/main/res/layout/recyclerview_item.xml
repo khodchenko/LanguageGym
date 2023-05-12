@@ -34,7 +34,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:text="@string/translation_textview"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/word_translation_color"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/progressBar_learning"
