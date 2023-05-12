@@ -23,5 +23,6 @@
     <string name="edit_word">Edit word</string>
     <string name="delete_word">Delete word</string>
     <string name="edit_words_detail_information_of_delete_word">Edit words detail information of delete word.</string>
+    <string name="save_word">Save word</string>
 
 </resources>

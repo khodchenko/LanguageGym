@@ -27,7 +27,16 @@
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/button_word_delete"
         app:layout_constraintEnd_toEndOf="parent" />
-
+    <Button
+        android:id="@+id/button_word_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/save_word"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/button_word_delete"
+        app:layout_constraintEnd_toEndOf="parent" />
     <Button
         android:id="@+id/button_word_delete"
         android:layout_width="wrap_content"
@@ -65,12 +74,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="?android:attr/listChoiceIndicatorSingle" />
-            <!--word-->
 
+            <!--word-->
             <TextView
                 android:id="@+id/word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="4dp"
                 android:paddingTop="16dp"
                 android:text="@string/word_textview"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -83,32 +93,39 @@
                 android:id="@+id/edit_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:autofillHints="enter word"
                 android:inputType="text"
                 android:paddingTop="16dp"
                 android:text="@string/word_textview"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textStyle="bold"
-                android:visibility="gone"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/progressBar_learning" />
+
             <!--translation-->
             <TextView
                 android:id="@+id/translation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="4dp"
                 android:paddingTop="8dp"
                 android:text="@string/translation_textview"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/word_translation_color"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/word" />
 
             <EditText
                 android:id="@+id/edit_translation"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:layout_margin="4dp"
+                android:autofillHints="enter translation"
                 android:inputType="text"
                 android:paddingTop="8dp"
                 android:text="@string/translation_textview"
@@ -116,7 +133,7 @@
                 android:textColor="@color/word_translation_color"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:visibility="gone"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_word" />
             <!--part of speech-->
@@ -124,20 +141,23 @@
                 android:id="@+id/part_of_speech"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="4dp"
                 android:paddingTop="8dp"
                 android:text="@string/part_of_speech_textview"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/translation" />
 
             <Spinner
                 android:id="@+id/edit_part_of_speech"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="120dp"
+                android:layout_height="48dp"
+                android:layout_margin="4dp"
                 android:paddingTop="8dp"
                 android:text="@string/part_of_speech_textview"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:visibility="gone"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_translation" />
             <!--declension -->
@@ -145,21 +165,25 @@
                 android:id="@+id/declension"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="4dp"
                 android:paddingTop="8dp"
                 android:text="@string/declension_textview"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/synonyms" />
+                app:layout_constraintTop_toBottomOf="@+id/edit_synonyms" />
             <!--gender -->
             <TextView
                 android:id="@+id/gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="4dp"
                 android:layout_marginStart="8dp"
                 android:paddingTop="8dp"
                 android:text="@string/gender_textview"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/translation"
                 app:layout_constraintStart_toEndOf="@+id/word"
                 app:layout_constraintTop_toBottomOf="@+id/image_url" />
@@ -167,13 +191,14 @@
             <Spinner
                 android:id="@+id/edit_gender"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:layout_margin="4dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
                 android:paddingTop="8dp"
                 android:text="@string/gender_textview"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/translation"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@+id/edit_word"
                 app:layout_constraintTop_toBottomOf="@+id/image_url" />
             <!--synonyms -->
@@ -181,9 +206,11 @@
                 android:id="@+id/synonyms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="4dp"
                 android:paddingTop="8dp"
                 android:text="@string/synonyms_textview"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/part_of_speech" />
@@ -191,12 +218,14 @@
             <EditText
                 android:id="@+id/edit_synonyms"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:layout_margin="4dp"
+                android:autofillHints="enter synonyms"
                 android:inputType="text"
                 android:paddingTop="8dp"
                 android:text="@string/synonyms_textview"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:visibility="gone"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_part_of_speech" />

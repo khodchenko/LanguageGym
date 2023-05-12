@@ -1,9 +1,12 @@
 package com.example.languagegym.data
 
+import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
+import android.util.Log
 
 class DictionaryDatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -25,20 +28,20 @@ class DictionaryDatabaseHelper(context: Context) :
         return db.insert(WordEntry.TABLE_NAME, null, values)
     }
 
-    fun updateWord(word: WordModel): Int {
-        val db = writableDatabase
+    fun updateWord(wordModel: WordModel): Int {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(WordEntry.COLUMN_NAME_WORD, wordModel.word)
+            put(WordEntry.COLUMN_NAME_TRANSLATION, wordModel.translation)
+            put(WordEntry.COLUMN_NAME_PART_OF_SPEECH, wordModel.partOfSpeech)
+            put(WordEntry.COLUMN_NAME_GENDER, wordModel.gender)
+            put(WordEntry.COLUMN_NAME_SYNONYMS, wordModel.synonyms.joinToString(","))
+        }
+        val rowsAffected = db.update(WordEntry.TABLE_NAME, values, "${BaseColumns._ID} = ?", arrayOf(wordModel.id.toString()))
 
-        val values = word.toContentValues()
+        Log.d(TAG, "Rows affected: $rowsAffected")
 
-        val selection = "${WordEntry._ID} = ?"
-        val selectionArgs = arrayOf(word.id.toString())
-
-        return db.update(
-            WordEntry.TABLE_NAME,
-            values,
-            selection,
-            selectionArgs
-        )
+        return rowsAffected
     }
 
     fun deleteWord(word: WordModel): Int {

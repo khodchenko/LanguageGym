@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -38,30 +40,55 @@ class DetailsFragment : Fragment() {
                 findNavController().navigateUp()
             }
         }
-        binding.buttonWordEdit.setOnClickListener{
-            val wordTextView = binding.word
-            val translationTextView = binding.translation
-            val partOfSpeechTextView = binding.partOfSpeech
-            val genderTextView = binding.gender
-            val synonymsTextView = binding.synonyms
-            val editWordEditText = binding.editWord
-            val editTranslationEditText = binding.editTranslation
-            val editPartOfSpeechEditText = binding.editPartOfSpeech
-            val editGenderEditText = binding.editGender
-            val editSynonymsEditText = binding.editSynonyms
-            // Hide elements
-            wordTextView.visibility = View.GONE
-            translationTextView.visibility = View.GONE
-            partOfSpeechTextView.visibility = View.GONE
-            genderTextView.visibility = View.GONE
-            synonymsTextView.visibility = View.GONE
+        binding.buttonWordEdit.setOnClickListener {
 
-            // Show elements
-            editWordEditText.visibility = View.VISIBLE
-            editTranslationEditText.visibility = View.VISIBLE
-            editPartOfSpeechEditText.visibility = View.VISIBLE
-            editGenderEditText.visibility = View.VISIBLE
-            editSynonymsEditText.visibility = View.VISIBLE
+            with(binding) {
+                hideEditButtons()
+                editFab.setImageResource(R.drawable.ic_ok)
+                val genderAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listOf("Female", "Male"))
+                val posAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listOf("NOUN", "PRONOUN", "VERB", "ADJECTIVE", "ADVERB", "PREPOSITION", "CONJUNCTION", "INTERJECTION"))
+
+                val wordText = word.text.toString()
+                val translationText = translation.text.toString()
+                val synonymsText = synonyms.text.toString()
+
+                listOf(word, translation, partOfSpeech, gender, synonyms).forEach { it.visibility = View.GONE }
+                listOf(editWord, editTranslation, editPartOfSpeech, editGender, editSynonyms).forEach { it.visibility = View.VISIBLE }
+
+                editWord.setText(wordText)
+                editTranslation.setText(translationText)
+                editSynonyms.setText(synonymsText)
+                editPartOfSpeech.adapter = posAdapter
+                editGender.adapter = genderAdapter
+                buttonWordSave.visibility = View.VISIBLE
+                buttonWordSave.setOnClickListener {
+                    val newWord = editWord.text.toString()
+                    val newTranslation = editTranslation.text.toString()
+                    val newPos = editPartOfSpeech.selectedItem.toString()
+                    val newGender = editGender.selectedItem.toString()
+                    val newSynonyms = editSynonyms.text.toString()
+
+                    val wordModel = word.id.let { WordModel(it.toLong(), newWord, newTranslation, newPos, newGender, listOf(newSynonyms)) }
+                    val rowsAffected = dbHelper.updateWord(wordModel)
+
+                    if (rowsAffected > 0) {
+                        binding.apply {
+                            word.text = newWord
+                            translation.text = newTranslation
+                            partOfSpeech.text = newPos
+                            gender.text = newGender
+                            synonyms.text = newSynonyms
+
+                            listOf(word, translation, partOfSpeech, gender, synonyms).forEach { it.visibility = View.VISIBLE }
+                            listOf(editWord, editTranslation, editPartOfSpeech, editGender, editSynonyms).forEach { it.visibility = View.GONE }
+
+                            editFab.setImageResource(R.drawable.ic_edit)
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "Failed to update word", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
         return binding.root
     }
@@ -90,6 +117,7 @@ class DetailsFragment : Fragment() {
         }
 
     }
+
     private fun toggleEditMode() {
         isEditMode = !isEditMode
 
@@ -103,9 +131,13 @@ class DetailsFragment : Fragment() {
             binding.buttonWordEdit.visibility = View.VISIBLE
             binding.buttonWordDelete.visibility = View.VISIBLE
         } else {
-            binding.buttonWordEdit.visibility = View.GONE
-            binding.buttonWordDelete.visibility = View.GONE
+            hideEditButtons()
         }
+    }
+
+    private fun hideEditButtons() {
+        binding.buttonWordEdit.visibility = View.GONE
+        binding.buttonWordDelete.visibility = View.GONE
     }
 
     override fun onDestroyView() {
