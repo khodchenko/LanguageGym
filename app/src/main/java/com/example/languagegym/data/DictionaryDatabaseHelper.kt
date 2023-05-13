@@ -94,7 +94,40 @@ class DictionaryDatabaseHelper(context: Context) :
 
         return words
     }
+    fun getWordsByPartOfSpeech(partOfSpeech: String): List<WordModel> {
+        val words = mutableListOf<WordModel>()
+        val db = readableDatabase
+        val selectQuery = "SELECT * FROM ${WordEntry.TABLE_NAME} WHERE ${WordEntry.COLUMN_NAME_PART_OF_SPEECH} = ?"
+        val cursor = db.rawQuery(selectQuery, arrayOf(partOfSpeech))
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID))
+                val word = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_WORD))
+                val translation = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_TRANSLATION))
+                val partOfSpeech = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_PART_OF_SPEECH))
+                val gender = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_GENDER))
+                val synonyms = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_SYNONYMS)).split(",")
+                val declension = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_DECLENSION)).split(",")
+                val imageUrl = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_IMAGE_URL))
+                val learningProgress = cursor.getInt(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_LEARNING_PROGRESS))
 
+                val newWord = WordModel(
+                    id = id,
+                    word = word,
+                    translation = translation,
+                    partOfSpeech = partOfSpeech,
+                    gender = gender,
+                    synonyms = synonyms,
+                    declension = declension,
+                    imageUrl = imageUrl,
+                    learningProgress = learningProgress
+                )
+                words.add(newWord)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return words
+    }
     companion object {
         const val DATABASE_VERSION = 1
         const val DATABASE_NAME = "Dictionary.db"

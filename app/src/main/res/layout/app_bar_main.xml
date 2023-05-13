@@ -16,7 +16,16 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.LanguageGym.PopupOverlay" />
+            app:popupTheme="@style/Theme.LanguageGym.PopupOverlay">
+
+            <ImageView
+                android:id="@+id/context_toolbar_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_filter"
+                android:contentDescription="@string/filter_words"
+                android:layout_gravity="end"/>
+    </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -47,38 +49,38 @@ class HomeFragment : Fragment() {
 
         databaseHelper = DictionaryDatabaseHelper(requireContext())
 
-        showLoadingIndicator()
 
-        GlobalScope.launch(Dispatchers.IO) {
-            val words = databaseHelper.getAllWords()
-            withContext(Dispatchers.Main) {
-                setupRecyclerView(words)
-                hideLoadingIndicator()
-                fab.show()
-            }
-        }
+        loadAllWordsToList()
 
         fab.setOnClickListener {
             showAddWordDialog()
         }
 
+        setupSpinnerAndRecyclerView()
+
         return binding.root
     }
 
-
-    private fun showLoadingIndicator() {
-        loadingIndicator.visibility = View.VISIBLE
+    private fun loadAllWordsToList() {
+        GlobalScope.launch(Dispatchers.IO) {
+            val words = databaseHelper.getAllWords()
+            withContext(Dispatchers.Main) {
+                setupRecyclerView(words)
+                updateRecyclerView(words)
+                fab.show()
+            }
+        }
     }
 
-    private fun hideLoadingIndicator() {
-        loadingIndicator.visibility = View.GONE
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-
-
+    fun filterByPartOfSpeech(partOfSpeech: String) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val words = databaseHelper.getWordsByPartOfSpeech(partOfSpeech)
+            withContext(Dispatchers.Main) {
+                setupRecyclerView(words)
+                updateRecyclerView(words)
+                fab.show()
+            }
+        }
     }
 
     private fun showAddWordDialog() {
@@ -134,19 +136,22 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView(words: List<WordModel>) {
-        adapter = RecyclerViewAdapter(requireContext(), words, object : RecyclerViewAdapter.OnWordItemClickListener {
+        adapter = RecyclerViewAdapter(
+            requireContext(),
+            words,
+            object : RecyclerViewAdapter.OnWordItemClickListener {
 
-            override fun onWordItemClick(word: WordModel) {
-                val bundle = Bundle().apply {
-                    putParcelable("word", word)
+                override fun onWordItemClick(word: WordModel) {
+                    val bundle = Bundle().apply {
+                        putParcelable("word", word)
+                    }
+                    findNavController().navigate(R.id.action_nav_home_to_detailsFragment, bundle)
                 }
-                findNavController().navigate(R.id.action_nav_home_to_detailsFragment, bundle)
-            }
 
-            override fun onWordItemDeleteClick(word: WordModel) {
-                //todo implementation
-            }
-        })
+                override fun onWordItemDeleteClick(word: WordModel) {
+                    //todo implementation
+                }
+            })
         recyclerView.adapter = adapter
     }
 
@@ -159,5 +164,35 @@ class HomeFragment : Fragment() {
         databaseHelper.close()
         _binding = null
     }
+    private fun setupSpinnerAndRecyclerView() {
+        val spinner = binding.spinnerFilter
+
+
+        val partsOfSpeech = listOf("All", "Noun", "Verb", "Adjective", "Adverb", "Preposition", "Conjunction", "Interjection")
+
+
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, partsOfSpeech)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+
+        spinner.adapter = adapter
+
+        // Устанавливаем обработчик выбора элемента в спиннере
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedPartOfSpeech = partsOfSpeech[position]
+                if(selectedPartOfSpeech == "All"){
+                    loadAllWordsToList() // показываем все слова, не фильтруя по части речи
+                } else {
+                    filterByPartOfSpeech(selectedPartOfSpeech) // фильтруем по выбранной части речи
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Do nothing
+            }
+        }
+    }
+
 
 }
