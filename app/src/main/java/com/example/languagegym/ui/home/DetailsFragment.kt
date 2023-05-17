@@ -13,6 +13,7 @@ import com.example.languagegym.R
 import com.example.languagegym.data.DictionaryDatabaseHelper
 import com.example.languagegym.data.WordModel
 import com.example.languagegym.databinding.FragmentDetailsBinding
+import com.example.languagegym.ui.add.AddWordFragment
 
 
 class DetailsFragment : Fragment() {
@@ -41,54 +42,13 @@ class DetailsFragment : Fragment() {
             }
         }
         binding.buttonWordEdit.setOnClickListener {
-
-            with(binding) {
-                hideEditButtons()
-                editFab.setImageResource(R.drawable.ic_ok)
-                val genderAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listOf("Female", "Male"))
-                val posAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listOf("NOUN", "PRONOUN", "VERB", "ADJECTIVE", "ADVERB", "PREPOSITION", "CONJUNCTION", "INTERJECTION"))
-
-                val wordText = word.text.toString()
-                val translationText = translation.text.toString()
-                val synonymsText = synonyms.text.toString()
-
-                listOf(word, translation, partOfSpeech, gender, synonyms).forEach { it.visibility = View.GONE }
-                listOf(editWord, editTranslation, editPartOfSpeech, editGender, editSynonyms).forEach { it.visibility = View.VISIBLE }
-
-                editWord.setText(wordText)
-                editTranslation.setText(translationText)
-                editSynonyms.setText(synonymsText)
-                editPartOfSpeech.adapter = posAdapter
-                editGender.adapter = genderAdapter
-                buttonWordSave.visibility = View.VISIBLE
-                buttonWordSave.setOnClickListener {
-                    val newWord = editWord.text.toString()
-                    val newTranslation = editTranslation.text.toString()
-                    val newPos = editPartOfSpeech.selectedItem.toString()
-                    val newGender = editGender.selectedItem.toString()
-                    val newSynonyms = editSynonyms.text.toString()
-
-                    val wordModel = word.id.let { WordModel(it.toLong(), newWord, newTranslation, newPos, newGender, listOf(newSynonyms)) }
-                    val rowsAffected = dbHelper.updateWord(wordModel)
-
-                    if (rowsAffected > 0) {
-                        binding.apply {
-                            word.text = newWord
-                            translation.text = newTranslation
-                            partOfSpeech.text = newPos
-                            gender.text = newGender
-                            synonyms.text = newSynonyms
-
-                            listOf(word, translation, partOfSpeech, gender, synonyms).forEach { it.visibility = View.VISIBLE }
-                            listOf(editWord, editTranslation, editPartOfSpeech, editGender, editSynonyms).forEach { it.visibility = View.GONE }
-
-                            editFab.setImageResource(R.drawable.ic_edit)
-                        }
-                    } else {
-                        Toast.makeText(requireContext(), "Failed to update word", Toast.LENGTH_SHORT).show()
-                    }
-                }
+            val word = arguments?.getParcelable<WordModel>("word")
+            val bundle = Bundle().apply {
+                putParcelable("word", word)
             }
+            val addWordFragment = AddWordFragment()
+            addWordFragment.arguments = bundle
+            findNavController().navigate(R.id.action_nav_details_to_addWordFragment, bundle)
         }
         return binding.root
     }
@@ -128,7 +88,7 @@ class DetailsFragment : Fragment() {
         }
 
         if (isEditMode) {
-            binding.buttonWordEdit.visibility = View.VISIBLE
+           binding.buttonWordEdit.visibility = View.VISIBLE
             binding.buttonWordDelete.visibility = View.VISIBLE
         } else {
             hideEditButtons()
@@ -137,7 +97,7 @@ class DetailsFragment : Fragment() {
 
     private fun hideEditButtons() {
         binding.buttonWordEdit.visibility = View.GONE
-        binding.buttonWordDelete.visibility = View.GONE
+       binding.buttonWordDelete.visibility = View.GONE
     }
 
     override fun onDestroyView() {

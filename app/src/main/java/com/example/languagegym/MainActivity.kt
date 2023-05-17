@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment
 import com.example.languagegym.data.DictionaryDatabaseHelper
 import com.example.languagegym.databinding.ActivityMainBinding
 import com.example.languagegym.ui.home.DetailsFragment
-import com.example.languagegym.ui.home.HomeFragment
+import com.example.languagegym.ui.home.ListFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
     // Метод для настройки кнопки в зависимости от текущего фрагмента
     private fun configureContextButton() {
         when (currentFragment) {
-            is HomeFragment -> {
+            is ListFragment -> {
                 // Настраиваем кнопку для первого фрагмента
                 binding.appBarMain.contextToolbarButton.visibility = View.VISIBLE
                 binding.appBarMain.contextToolbarButton.setImageResource(R.drawable.ic_filter)
@@ -129,9 +129,9 @@ class MainActivity : AppCompatActivity() {
             ) {
                 val partOfSpeech = filterOptions[position]
                 // Вызываем метод в HomeFragment для фильтрации списка слов
-                val homeFragment =
-                    supportFragmentManager.findFragmentByTag("HomeFragment") as? HomeFragment
-                homeFragment?.filterByPartOfSpeech(partOfSpeech)
+                val listFragment =
+                    supportFragmentManager.findFragmentByTag("HomeFragment") as? ListFragment
+                listFragment?.filterByPartOfSpeech(partOfSpeech)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {

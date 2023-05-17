@@ -26,5 +26,8 @@
     <string name="save_word">Save word</string>
     <string name="application_name">VOCABUL</string>
     <string name="filter_words">filter_words</string>
+    <string name="AddWordFragmentHeader">Add new word</string>
+    <string name="StartFragmentHeader">VOCABUL</string>
+    <string name="DetailsFragmentHeader">Detail word info</string>
 
 </resources>

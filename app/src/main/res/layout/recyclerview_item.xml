@@ -71,7 +71,8 @@
             android:layout_height="80dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="?android:attr/listChoiceIndicatorSingle"
+         
+
             tools:srcCompat="@android:drawable/presence_invisible" />
 
         <ProgressBar

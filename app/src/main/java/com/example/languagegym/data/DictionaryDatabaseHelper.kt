@@ -29,15 +29,24 @@ class DictionaryDatabaseHelper(context: Context) :
     }
 
     fun updateWord(wordModel: WordModel): Int {
-        val db = this.writableDatabase
+        val db = writableDatabase
+
         val values = ContentValues().apply {
-            put(WordEntry.COLUMN_NAME_WORD, wordModel.word)
             put(WordEntry.COLUMN_NAME_TRANSLATION, wordModel.translation)
             put(WordEntry.COLUMN_NAME_PART_OF_SPEECH, wordModel.partOfSpeech)
             put(WordEntry.COLUMN_NAME_GENDER, wordModel.gender)
             put(WordEntry.COLUMN_NAME_SYNONYMS, wordModel.synonyms.joinToString(","))
         }
-        val rowsAffected = db.update(WordEntry.TABLE_NAME, values, "${BaseColumns._ID} = ?", arrayOf(wordModel.id.toString()))
+
+        val selection = "${WordEntry.COLUMN_NAME_WORD} = ?"
+        val selectionArgs = arrayOf(wordModel.word)
+
+        val rowsAffected = db.update(
+            WordEntry.TABLE_NAME,
+            values,
+            selection,
+            selectionArgs
+        )
 
         Log.d(TAG, "Rows affected: $rowsAffected")
 
@@ -47,8 +56,8 @@ class DictionaryDatabaseHelper(context: Context) :
     fun deleteWord(word: WordModel): Int {
         val db = writableDatabase
 
-        val selection = "${WordEntry._ID} = ?"
-        val selectionArgs = arrayOf(word.id.toString())
+        val selection = "${WordEntry.COLUMN_NAME_WORD} LIKE ?"
+        val selectionArgs = arrayOf(WordEntry.COLUMN_NAME_WORD)
 
         return db.delete(
             WordEntry.TABLE_NAME,
@@ -61,7 +70,6 @@ class DictionaryDatabaseHelper(context: Context) :
         val db = readableDatabase
 
         val projection = arrayOf(
-            BaseColumns._ID,
             WordEntry.COLUMN_NAME_WORD,
             WordEntry.COLUMN_NAME_TRANSLATION,
             WordEntry.COLUMN_NAME_PART_OF_SPEECH,
@@ -94,14 +102,14 @@ class DictionaryDatabaseHelper(context: Context) :
 
         return words
     }
-    fun getWordsByPartOfSpeech(partOfSpeech: String): List<WordModel> {
+
+    fun getWordsByPartOfSpeech(inputPartOfSpeech: String): List<WordModel> {
         val words = mutableListOf<WordModel>()
         val db = readableDatabase
         val selectQuery = "SELECT * FROM ${WordEntry.TABLE_NAME} WHERE ${WordEntry.COLUMN_NAME_PART_OF_SPEECH} = ?"
-        val cursor = db.rawQuery(selectQuery, arrayOf(partOfSpeech))
+        val cursor = db.rawQuery(selectQuery, arrayOf(inputPartOfSpeech))
         if (cursor.moveToFirst()) {
             do {
-                val id = cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID))
                 val word = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_WORD))
                 val translation = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_TRANSLATION))
                 val partOfSpeech = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_PART_OF_SPEECH))
@@ -112,7 +120,6 @@ class DictionaryDatabaseHelper(context: Context) :
                 val learningProgress = cursor.getInt(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_LEARNING_PROGRESS))
 
                 val newWord = WordModel(
-                    id = id,
                     word = word,
                     translation = translation,
                     partOfSpeech = partOfSpeech,
@@ -128,14 +135,14 @@ class DictionaryDatabaseHelper(context: Context) :
         cursor.close()
         return words
     }
+
     companion object {
         const val DATABASE_VERSION = 1
         const val DATABASE_NAME = "Dictionary.db"
 
         private const val SQL_CREATE_ENTRIES =
             "CREATE TABLE ${WordEntry.TABLE_NAME} (" +
-                    "${BaseColumns._ID} INTEGER PRIMARY KEY," +
-                    "${WordEntry.COLUMN_NAME_WORD} TEXT," +
+                    "${WordEntry.COLUMN_NAME_WORD} TEXT PRIMARY KEY," +
                     "${WordEntry.COLUMN_NAME_TRANSLATION} TEXT," +
                     "${WordEntry.COLUMN_NAME_PART_OF_SPEECH} TEXT," +
                     "${WordEntry.COLUMN_NAME_GENDER} TEXT," +

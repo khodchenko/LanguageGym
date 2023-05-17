@@ -60,8 +60,8 @@ class RecyclerViewAdapter(
             binding.genderTextview.text = word.gender
             binding.progressBarLearning.progress = word.learningProgress
             if (word.imageUrl == "") {
-                binding.wordImage.setImageResource(R.drawable.ic_error)
-                binding.wordImage.setColorFilter(Color.GRAY)
+                //binding.wordImage.setImageResource(R.drawable.ic_error)
+                //binding.wordImage.setColorFilter(Color.GRAY)
             } else {
                 binding.wordImage.setImageURI(stringToUri(word.imageUrl))
             }

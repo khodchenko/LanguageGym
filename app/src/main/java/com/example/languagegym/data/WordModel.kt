@@ -7,7 +7,6 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class WordModel(
-    var id: Long = -1,
     var word: String = "",
     var translation: String = "",
     var partOfSpeech: String = "",
@@ -18,7 +17,6 @@ class WordModel(
     var learningProgress: Int = 0
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readLong(),
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
@@ -30,7 +28,6 @@ class WordModel(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeLong(id)
         parcel.writeString(word)
         parcel.writeString(translation)
         parcel.writeString(partOfSpeech)
@@ -56,7 +53,6 @@ class WordModel(
     }
 
     constructor(cursor: Cursor) : this(
-        id = cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID)),
         word = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_WORD)),
         translation = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_TRANSLATION)),
         partOfSpeech = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_PART_OF_SPEECH)),
