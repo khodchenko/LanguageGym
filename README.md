@@ -1,3 +1,3 @@
-# LanguageGym
+# Language Trainer & Dictionary
 
 Glide
