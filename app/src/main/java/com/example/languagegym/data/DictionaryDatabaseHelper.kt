@@ -57,7 +57,7 @@ class DictionaryDatabaseHelper(context: Context) :
         val db = writableDatabase
 
         val selection = "${WordEntry.COLUMN_NAME_WORD} LIKE ?"
-        val selectionArgs = arrayOf(WordEntry.COLUMN_NAME_WORD)
+        val selectionArgs = arrayOf(word.word)
 
         return db.delete(
             WordEntry.TABLE_NAME,

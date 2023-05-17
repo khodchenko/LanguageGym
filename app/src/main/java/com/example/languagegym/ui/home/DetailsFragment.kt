@@ -69,11 +69,11 @@ class DetailsFragment : Fragment() {
             binding.progressBarLearning.progress = it.learningProgress
 
             // Load image
-            Glide.with(binding.imageUrl)
-                .load(it.imageUrl)
-                .placeholder(R.drawable.ic_menu_camera)
-                .error(R.drawable.ic_error)
-                .into(binding.imageUrl)
+//            Glide.with(binding.imageUrl)
+//                .load(it.imageUrl)
+//                .placeholder(R.drawable.ic_menu_camera)
+//                .error(R.drawable.ic_error)
+//                .into(binding.imageUrl)
         }
 
     }
