@@ -51,7 +51,7 @@
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/progressBar_learning"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView_voice" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_text_to_speech" />
 
         <TextView
             android:id="@+id/gender_textview"
@@ -86,7 +86,7 @@
             app:layout_constraintTop_toBottomOf="@+id/wordImage" />
 
         <ImageView
-            android:id="@+id/imageView_voice"
+            android:id="@+id/iv_text_to_speech"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="4dp"
