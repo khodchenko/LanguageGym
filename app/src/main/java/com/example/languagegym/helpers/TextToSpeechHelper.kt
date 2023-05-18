@@ -1,4 +1,4 @@
-package com.example.languagegym.data
+package com.example.languagegym.helpers
 
 import android.content.Context
 import android.speech.tts.TextToSpeech
@@ -14,14 +14,14 @@ class TextToSpeechHelper(private val context: Context) : TextToSpeech.OnInitList
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            // Установка языка (может быть настройкой пользователя)
+            // Language setting (may be user setting)
             val result = textToSpeech?.setLanguage(Locale.getDefault())
 
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                // Язык не поддерживается, обработайте эту ситуацию по вашему усмотрению
+                // Language not supported, handle this situation as you wish
             }
         } else {
-            // Ошибка инициализации TTS, обработайте эту ситуацию по вашему усмотрению
+            // TTS initialization failed, handle this situation as you wish
         }
     }
 

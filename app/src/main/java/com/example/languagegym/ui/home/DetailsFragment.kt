@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.languagegym.R
-import com.example.languagegym.data.DictionaryDatabaseHelper
-import com.example.languagegym.data.TextToSpeechHelper
-import com.example.languagegym.data.WordModel
+import com.example.languagegym.helpers.DictionaryDatabaseHelper
+import com.example.languagegym.helpers.TextToSpeechHelper
+import com.example.languagegym.model.WordModel
 import com.example.languagegym.databinding.FragmentDetailsBinding
 import com.example.languagegym.ui.add.AddWordFragment
 

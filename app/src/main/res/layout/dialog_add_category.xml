@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- dialog_add_category.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Category"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:gravity="center" />
+
+    <EditText
+        android:id="@+id/etCategoryName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Category Name"
+        android:inputType="text" />
+
+</LinearLayout>

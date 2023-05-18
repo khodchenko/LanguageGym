@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.languagegym.R
-import com.example.languagegym.data.TextToSpeechHelper
-import com.example.languagegym.data.WordModel
+import com.example.languagegym.helpers.TextToSpeechHelper
+import com.example.languagegym.model.WordModel
 import com.example.languagegym.databinding.RecyclerviewItemBinding
 
 
@@ -27,9 +27,6 @@ class RecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
         val binding = RecyclerviewItemBinding.inflate(LayoutInflater.from(context), parent, false)
-
-
-
         return WordViewHolder(binding, listener)
     }
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
@@ -64,6 +61,7 @@ class RecyclerViewAdapter(
             binding.genderTextview.text = word.gender
             binding.progressBarLearning.progress = word.learningProgress
             if (word.imageUrl == "") {
+                //todo fix hiding image view when there is no uri in data
                 binding.wordImage.visibility = View.INVISIBLE
                 //binding.wordImage.setImageResource(R.drawable.ic_error)
                 //binding.wordImage.setColorFilter(Color.GRAY)

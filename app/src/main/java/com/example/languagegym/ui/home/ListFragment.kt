@@ -12,8 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.languagegym.R
-import com.example.languagegym.data.DictionaryDatabaseHelper
-import com.example.languagegym.data.WordModel
+import com.example.languagegym.helpers.DictionaryDatabaseHelper
+import com.example.languagegym.model.WordModel
 import com.example.languagegym.databinding.FragmentListBinding
 import com.example.languagegym.ui.add.AddWordFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton

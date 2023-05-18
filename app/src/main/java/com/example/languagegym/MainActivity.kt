@@ -15,7 +15,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.languagegym.data.DictionaryDatabaseHelper
+import com.example.languagegym.helpers.DictionaryDatabaseHelper
 import com.example.languagegym.databinding.ActivityMainBinding
 import com.example.languagegym.ui.home.DetailsFragment
 import com.example.languagegym.ui.home.ListFragment

@@ -1,4 +1,4 @@
-package com.example.languagegym.data
+package com.example.languagegym.helpers
 
 import android.content.ContentValues
 import android.content.ContentValues.TAG
@@ -6,6 +6,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.example.languagegym.model.WordEntry
+import com.example.languagegym.model.WordModel
 
 class DictionaryDatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {

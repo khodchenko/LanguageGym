@@ -1,4 +1,4 @@
-package com.example.languagegym.data
+package com.example.languagegym.model
 
 import android.provider.BaseColumns
 
