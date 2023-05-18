@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -56,24 +54,25 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val word = arguments?.getParcelable<WordModel>("word")
+
+        val wordToBind: WordModel? = arguments?.getParcelable("word")
 
         // Bind word data to view
-        word?.let {
-            binding.word.text = it.word
-            binding.translation.text = it.translation
-            binding.partOfSpeech.text = it.partOfSpeech
-            binding.gender.text = it.gender
-            binding.declension.text = it.declension.joinToString(", ")
-            binding.synonyms.text = it.synonyms.joinToString(", ")
-            binding.progressBarLearning.progress = it.learningProgress
+        wordToBind?.run {
+            binding.word.text = word
+            binding.translation.text = translation
+            binding.partOfSpeech.text = partOfSpeech
+            binding.gender.text = gender
+            binding.declension.text = declension.joinToString(", ")
+            binding.synonyms.text = synonyms.joinToString(", ")
+            binding.progressBarLearning.progress = learningProgress
 
-            // Load image
-//            Glide.with(binding.imageUrl)
-//                .load(it.imageUrl)
-//                .placeholder(R.drawable.ic_menu_camera)
-//                .error(R.drawable.ic_error)
-//                .into(binding.imageUrl)
+            //todo fix Load image
+            Glide.with(requireContext())
+                .load(imageUrl)
+                .placeholder(R.drawable.ic_menu_camera)
+                .error(R.drawable.ic_error)
+                .into(binding.ivWordImage)
         }
 
     }

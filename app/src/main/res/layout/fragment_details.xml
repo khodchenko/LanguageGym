@@ -63,7 +63,7 @@
             android:padding="16dp">
 
             <ImageView
-                android:id="@+id/image_url"
+                android:id="@+id/iv_word_image"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -87,9 +87,20 @@
                 android:textStyle="bold"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image_url" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_word_image" />
 
             <!--translation-->
+            <ImageView
+                android:id="@+id/imageView_voice"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/gender"
+                app:layout_constraintTop_toBottomOf="@+id/iv_word_image"
+                app:srcCompat="@drawable/ic_baseline_volume_up" />
+
             <TextView
                 android:id="@+id/translation"
                 android:layout_width="match_parent"
@@ -144,7 +155,7 @@
                 android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/translation"
                 app:layout_constraintStart_toEndOf="@+id/word"
-                app:layout_constraintTop_toBottomOf="@+id/image_url" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_word_image" />
 
             <!--synonyms -->
             <TextView
@@ -167,7 +178,7 @@
                 android:layout_height="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image_url" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_word_image" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

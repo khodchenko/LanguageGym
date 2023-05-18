@@ -2,7 +2,6 @@ package com.example.languagegym.data
 
 import android.content.ContentValues
 import android.database.Cursor
-import android.provider.BaseColumns
 import android.os.Parcel
 import android.os.Parcelable
 

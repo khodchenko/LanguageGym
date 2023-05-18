@@ -1,12 +1,18 @@
 package com.example.languagegym.ui.add
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.languagegym.data.DictionaryDatabaseHelper
 import com.example.languagegym.data.WordModel
 import com.example.languagegym.databinding.FragmentAddWordBinding
@@ -19,6 +25,11 @@ class AddWordFragment : Fragment() {
     interface OnWordAddedListener {
         fun onWordAdded()
     }
+
+
+    private lateinit var ivImagePicker: ImageView
+    private var imageUri: Uri? = null
+    private val REQUEST_IMAGE_GALLERY: Int = 100
     var onWordAddedListener: OnWordAddedListener? = null
     private var _binding: FragmentAddWordBinding? = null
     private val binding get() = _binding!!
@@ -35,6 +46,15 @@ class AddWordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        ivImagePicker = binding.ivImagePicker
+        binding.ivImagePicker.setOnClickListener {
+            openGallery()
+            Toast.makeText(
+                requireContext(),
+                " openGallery()",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
 
         binding.floatingActionButton.setOnClickListener {
             val word = binding.etWord.text.toString()
@@ -69,11 +89,13 @@ class AddWordFragment : Fragment() {
             } else {
                 // Если аргументы отсутствуют, значит это добавление нового слова
 
+
                 if (word.isNotEmpty() && translation.isNotEmpty()) {
                     val newWord = WordModel(
                         word = word,
                         translation = translation,
                         partOfSpeech = partOfSpeech,
+                        imageUrl = imageUri.toString()
                     )
 
                     val dbHelper = DictionaryDatabaseHelper(requireContext())
@@ -99,6 +121,23 @@ class AddWordFragment : Fragment() {
             }
         }
     }
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, REQUEST_IMAGE_GALLERY)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK) {
+            imageUri = data?.data
+            imageUri?.let {
+                Glide.with(this)
+                    .load(imageUri)
+                    .into(ivImagePicker)
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
 

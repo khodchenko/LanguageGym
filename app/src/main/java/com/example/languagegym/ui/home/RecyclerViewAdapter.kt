@@ -4,8 +4,10 @@ import android.content.Context
 import android.graphics.Color
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.languagegym.R
 import com.example.languagegym.data.WordModel
 import com.example.languagegym.databinding.RecyclerviewItemBinding
@@ -48,9 +50,6 @@ class RecyclerViewAdapter(
                 listener.onWordItemClick(words[adapterPosition])
             }
 
-//            binding.deleteButton.setOnClickListener {
-//                listener.onWordItemDeleteClick(words[adapterPosition])
-//            }
         }
 
         fun bind(word: WordModel) {
@@ -60,23 +59,21 @@ class RecyclerViewAdapter(
             binding.genderTextview.text = word.gender
             binding.progressBarLearning.progress = word.learningProgress
             if (word.imageUrl == "") {
+                binding.wordImage.visibility = View.INVISIBLE
                 //binding.wordImage.setImageResource(R.drawable.ic_error)
                 //binding.wordImage.setColorFilter(Color.GRAY)
             } else {
-                binding.wordImage.setImageURI(stringToUri(word.imageUrl))
+                Glide.with(context)
+                    .load(word.imageUrl)
+                    .placeholder(R.drawable.ic_menu_camera)
+                    .error(R.drawable.ic_error)
+                    .into(binding.wordImage)
             }
-            //todo implementation
+            //todo implementation click-to-speech
 //            binding.imageViewVoice.setOnClickListener {
 //                // Implement text-to-speech functionality here
 //            }
         }
     }
 
-    private fun stringToUri(imageUrl: String): Uri? {
-        return try {
-            Uri.parse(imageUrl)
-        } catch (e: Exception) {
-            null
-        }
-    }
 }
