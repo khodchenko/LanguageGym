@@ -1,3 +1,8 @@
-# LanguageGym
+# Language Trainer & Dictionary
+Local libraries: 
 
-Glide
+-SQLite
+
+Outsource libraries: 
+
+-Glide https://github.com/bumptech/glide
