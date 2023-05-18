@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.languagegym.R
 import com.example.languagegym.data.DictionaryDatabaseHelper
+import com.example.languagegym.data.TextToSpeechHelper
 import com.example.languagegym.data.WordModel
 import com.example.languagegym.databinding.FragmentDetailsBinding
 import com.example.languagegym.ui.add.AddWordFragment
@@ -20,6 +21,8 @@ class DetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private var isEditMode = false
     private lateinit var dbHelper: DictionaryDatabaseHelper
+    private lateinit var textToSpeechHelper: TextToSpeechHelper
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,7 +30,7 @@ class DetailsFragment : Fragment() {
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         dbHelper = DictionaryDatabaseHelper(requireContext())
-
+        textToSpeechHelper = TextToSpeechHelper(requireContext())
         binding.editFab.setOnClickListener {
             toggleEditMode()
         }
@@ -48,6 +51,7 @@ class DetailsFragment : Fragment() {
             addWordFragment.arguments = bundle
             findNavController().navigate(R.id.action_nav_details_to_addWordFragment, bundle)
         }
+
         return binding.root
     }
 
@@ -73,8 +77,12 @@ class DetailsFragment : Fragment() {
                 .placeholder(R.drawable.ic_menu_camera)
                 .error(R.drawable.ic_error)
                 .into(binding.ivWordImage)
-        }
 
+            binding.ivTextToSpeech.setOnClickListener {
+                val wordToSpeak = word// Получите слово для озвучивания
+                textToSpeechHelper.speak(wordToSpeak)
+            }
+        }
     }
 
     private fun toggleEditMode() {
@@ -97,6 +105,11 @@ class DetailsFragment : Fragment() {
     private fun hideEditButtons() {
         binding.buttonWordEdit.visibility = View.GONE
        binding.buttonWordDelete.visibility = View.GONE
+    }
+
+    override fun onPause() {
+        super.onPause()
+        textToSpeechHelper.release()
     }
 
     override fun onDestroyView() {
