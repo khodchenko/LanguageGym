@@ -53,10 +53,14 @@ class CategoryFragment : Fragment() {
             .setPositiveButton("Create", DialogInterface.OnClickListener { dialog, _ ->
                 val categoryName = etCategoryName.text.toString()
                 if (categoryName.isNotEmpty()) {
-                    val categoryColor = getColorFromUser() // Получите цвет от пользователя (например, с помощью диалога выбора цвета)
+                    val categoryColor = getColorFromUser()
                     val category = CategoryModel(categoryName, categoryColor, mutableListOf())
                     categories.add(category)
                     Toast.makeText(requireContext(), "Category created!", Toast.LENGTH_SHORT).show()
+
+                    // Update the UI with the new category
+                    updateCategoryList()
+
                 } else {
                     Toast.makeText(requireContext(), "Please enter a category name", Toast.LENGTH_SHORT).show()
                 }
@@ -69,6 +73,11 @@ class CategoryFragment : Fragment() {
             .show()
     }
 
+    private fun updateCategoryList() {
+        // Create an adapter for the GridView
+        val adapter = CategoryAdapter(requireContext(), categories)
+        binding.gridViewCategories.adapter = adapter
+    }
     private fun getColorFromUser(): Int {
         // Реализуйте метод для получения цвета от пользователя.
         // Например, можно использовать AlertDialog с палитрой цветов или другую подходящую реализацию.

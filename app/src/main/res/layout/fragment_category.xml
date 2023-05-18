@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- fragment_category.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,6 +10,18 @@
         android:id="@+id/btnAddCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Category" />
+        android:text="Add Category"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <GridView
+        android:id="@+id/gridViewCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnAddCategory"
+        android:numColumns="2"
+        android:verticalSpacing="8dp"
+        android:horizontalSpacing="8dp"
+        android:paddingTop="16dp" />
 
 </RelativeLayout>
