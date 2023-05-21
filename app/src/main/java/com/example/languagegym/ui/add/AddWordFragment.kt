@@ -61,6 +61,7 @@ class AddWordFragment : Fragment() {
             val translation = binding.etWord2.text.toString()
             //todo change it to default category
             val partOfSpeech = binding.spinnerPos.selectedItem?.toString() ?: ""
+            //todo make realization
             val category = binding.spinnerCategory.selectedItem?.toString() ?: ""
 
             val wordModelArg = arguments?.getParcelable<WordModel>("word")

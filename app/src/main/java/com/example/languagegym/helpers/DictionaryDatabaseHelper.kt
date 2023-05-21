@@ -33,6 +33,7 @@ class DictionaryDatabaseHelper(context: Context) :
         val db = writableDatabase
 
         val values = ContentValues().apply {
+            put(WordEntry.COLUMN_NAME_WORD, wordModel.word)
             put(WordEntry.COLUMN_NAME_TRANSLATION, wordModel.translation)
             put(WordEntry.COLUMN_NAME_PART_OF_SPEECH, wordModel.partOfSpeech)
             put(WordEntry.COLUMN_NAME_GENDER, wordModel.gender)
