@@ -25,12 +25,12 @@ import kotlinx.coroutines.withContext
 class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
 
     private var _binding: FragmentListBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RecyclerViewAdapter
     private lateinit var databaseHelper: DictionaryDatabaseHelper
     private lateinit var fab: FloatingActionButton
-    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,41 +44,37 @@ class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
 
         databaseHelper = DictionaryDatabaseHelper(requireContext())
 
-        loadAllWordsToList()
+        setupSpinner()
 
         fab.setOnClickListener {
             val addWordFragment = AddWordFragment()
-            addWordFragment.onWordAddedListener = this  // Установка слушателя
+            addWordFragment.onWordAddedListener = this
             findNavController().navigate(R.id.action_nav_home_to_addWordFragment)
         }
-
-        setupSpinnerAndRecyclerView()
 
         return binding.root
     }
 
-    private fun loadAllWordsToList() {
-        GlobalScope.launch(Dispatchers.IO) {
-            val words = databaseHelper.getAllWords()
-            withContext(Dispatchers.Main) {
+    fun loadWordsByFilter(filter: String) {
+        GlobalScope.launch(Dispatchers.Main) {
+            try {
+                val words = withContext(Dispatchers.IO) {
+                    if (filter == "All") {
+                        databaseHelper.getAllWords()
+                    } else {
+                        databaseHelper.getWordsByPartOfSpeech(filter)
+                    }
+                }
                 setupRecyclerView(words)
                 updateRecyclerView(words)
                 fab.show()
+                showToast("Words loaded successfully")
+            } catch (e: Exception) {
+                showToast("Failed to load words")
             }
         }
     }
 
-
-     fun filterByPartOfSpeech(partOfSpeech: String) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val words = databaseHelper.getWordsByPartOfSpeech(partOfSpeech)
-            withContext(Dispatchers.Main) {
-                setupRecyclerView(words)
-                updateRecyclerView(words)
-                fab.show()
-            }
-        }
-    }
 
     private fun setupRecyclerView(words: List<WordModel>) {
         adapter = RecyclerViewAdapter(
@@ -105,7 +101,7 @@ class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
     }
 
 
-    private fun setupSpinnerAndRecyclerView() {
+    private fun setupSpinner() {
         val spinner = binding.spinnerFilter
 
         val partsOfSpeech = listOf(
@@ -119,27 +115,26 @@ class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
             "Interjection"
         )
 
-        val spinnerAdapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, partsOfSpeech)
+        val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, partsOfSpeech)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
         spinner.adapter = spinnerAdapter
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val selectedPartOfSpeech = partsOfSpeech[position]
-                if (selectedPartOfSpeech == "All") {
-                    loadAllWordsToList()
-                } else {
-                    filterByPartOfSpeech(selectedPartOfSpeech)
-                }
+                loadWordsByFilter(selectedPartOfSpeech)
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Do nothing
-            }
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
     }
+
+    private fun showToast(message: String) {
+        GlobalScope.launch(Dispatchers.Main) {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         databaseHelper.close()

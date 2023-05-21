@@ -1,9 +1,12 @@
 package com.example.languagegym.model
 
 import android.provider.BaseColumns
+import androidx.room.PrimaryKey
 
 object WordEntry : BaseColumns {
+    @PrimaryKey(autoGenerate = true)
     const val TABLE_NAME = "word"
+    const val COLUMN_NAME_ID = "id"
     const val COLUMN_NAME_WORD = "word"
     const val COLUMN_NAME_TRANSLATION = "translation"
     const val COLUMN_NAME_PART_OF_SPEECH = "part_of_speech"

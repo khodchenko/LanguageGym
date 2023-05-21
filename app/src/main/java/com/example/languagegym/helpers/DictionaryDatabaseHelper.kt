@@ -33,11 +33,15 @@ class DictionaryDatabaseHelper(context: Context) :
         val db = writableDatabase
 
         val values = ContentValues().apply {
+            put(WordEntry.COLUMN_NAME_ID, wordModel.id)
             put(WordEntry.COLUMN_NAME_WORD, wordModel.word)
             put(WordEntry.COLUMN_NAME_TRANSLATION, wordModel.translation)
             put(WordEntry.COLUMN_NAME_PART_OF_SPEECH, wordModel.partOfSpeech)
             put(WordEntry.COLUMN_NAME_GENDER, wordModel.gender)
             put(WordEntry.COLUMN_NAME_SYNONYMS, wordModel.synonyms.joinToString(","))
+            put(WordEntry.COLUMN_NAME_DECLENSION, wordModel.declension.joinToString(","))
+            put(WordEntry.COLUMN_NAME_IMAGE_URL, wordModel.imageUrl)
+            put(WordEntry.COLUMN_NAME_LEARNING_PROGRESS, wordModel.learningProgress)
         }
 
         val selection = "${WordEntry.COLUMN_NAME_WORD} = ?"
@@ -72,12 +76,13 @@ class DictionaryDatabaseHelper(context: Context) :
         val db = readableDatabase
 
         val projection = arrayOf(
+            WordEntry.COLUMN_NAME_ID,
             WordEntry.COLUMN_NAME_WORD,
             WordEntry.COLUMN_NAME_TRANSLATION,
             WordEntry.COLUMN_NAME_PART_OF_SPEECH,
             WordEntry.COLUMN_NAME_GENDER,
-            WordEntry.COLUMN_NAME_DECLENSION,
             WordEntry.COLUMN_NAME_SYNONYMS,
+            WordEntry.COLUMN_NAME_DECLENSION,
             WordEntry.COLUMN_NAME_IMAGE_URL,
             WordEntry.COLUMN_NAME_LEARNING_PROGRESS
         )
@@ -108,20 +113,33 @@ class DictionaryDatabaseHelper(context: Context) :
     fun getWordsByPartOfSpeech(inputPartOfSpeech: String): List<WordModel> {
         val words = mutableListOf<WordModel>()
         val db = readableDatabase
-        val selectQuery = "SELECT * FROM ${WordEntry.TABLE_NAME} WHERE ${WordEntry.COLUMN_NAME_PART_OF_SPEECH} = ?"
+        val selectQuery =
+            "SELECT * FROM ${WordEntry.TABLE_NAME} WHERE ${WordEntry.COLUMN_NAME_PART_OF_SPEECH} = ?"
         val cursor = db.rawQuery(selectQuery, arrayOf(inputPartOfSpeech))
         if (cursor.moveToFirst()) {
             do {
-                val word = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_WORD))
-                val translation = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_TRANSLATION))
-                val partOfSpeech = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_PART_OF_SPEECH))
-                val gender = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_GENDER))
-                val synonyms = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_SYNONYMS)).split(",")
-                val declension = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_DECLENSION)).split(",")
-                val imageUrl = cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_IMAGE_URL))
-                val learningProgress = cursor.getInt(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_LEARNING_PROGRESS))
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_ID))
+                val word =
+                    cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_WORD))
+                val translation =
+                    cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_TRANSLATION))
+                val partOfSpeech =
+                    cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_PART_OF_SPEECH))
+                val gender =
+                    cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_GENDER))
+                val synonyms =
+                    cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_SYNONYMS))
+                        .split(",")
+                val declension =
+                    cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_DECLENSION))
+                        .split(",")
+                val imageUrl =
+                    cursor.getString(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_IMAGE_URL))
+                val learningProgress =
+                    cursor.getInt(cursor.getColumnIndexOrThrow(WordEntry.COLUMN_NAME_LEARNING_PROGRESS))
 
                 val newWord = WordModel(
+                    id = id,
                     word = word,
                     translation = translation,
                     partOfSpeech = partOfSpeech,
@@ -144,7 +162,8 @@ class DictionaryDatabaseHelper(context: Context) :
 
         private const val SQL_CREATE_ENTRIES =
             "CREATE TABLE ${WordEntry.TABLE_NAME} (" +
-                    "${WordEntry.COLUMN_NAME_WORD} TEXT PRIMARY KEY," +
+                    "${WordEntry.COLUMN_NAME_ID} INTEGER PRIMARY KEY NOT NULL," +
+                    "${WordEntry.COLUMN_NAME_WORD} TEXT," +
                     "${WordEntry.COLUMN_NAME_TRANSLATION} TEXT," +
                     "${WordEntry.COLUMN_NAME_PART_OF_SPEECH} TEXT," +
                     "${WordEntry.COLUMN_NAME_GENDER} TEXT," +
