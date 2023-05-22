@@ -1,4 +1,4 @@
-package com.example.languagegym.ui.home
+package com.example.languagegym.ui.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,10 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.languagegym.R
-import com.example.languagegym.helpers.DictionaryDatabaseHelper
 import com.example.languagegym.helpers.TextToSpeechHelper
 import com.example.languagegym.model.WordModel
 import com.example.languagegym.databinding.FragmentDetailsBinding
+import com.example.languagegym.model.DictionaryDatabase
 import com.example.languagegym.ui.add.AddWordFragment
 
 
@@ -20,7 +20,7 @@ class DetailsFragment : Fragment() {
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
     private var isEditMode = false
-    private lateinit var dbHelper: DictionaryDatabaseHelper
+    private lateinit var dbHelper: DictionaryDatabase
     private lateinit var textToSpeechHelper: TextToSpeechHelper
 
     override fun onCreateView(
@@ -29,7 +29,7 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        dbHelper = DictionaryDatabaseHelper(requireContext())
+     //   dbHelper = DictionaryDatabase(requireContext())
         textToSpeechHelper = TextToSpeechHelper(requireContext())
         binding.editFab.setOnClickListener {
             toggleEditMode()
@@ -38,7 +38,7 @@ class DetailsFragment : Fragment() {
         binding.buttonWordDelete.setOnClickListener {
             val word = arguments?.getParcelable<WordModel>("word")
             if (word != null) {
-                dbHelper.deleteWord(word)
+               // dbHelper.deleteWord(word)
                 findNavController().navigateUp()
             }
         }
@@ -67,8 +67,8 @@ class DetailsFragment : Fragment() {
             binding.translation.text = translation
             binding.partOfSpeech.text = partOfSpeech
             binding.gender.text = gender
-            binding.declension.text = declension.joinToString(", ")
-            binding.synonyms.text = synonyms.joinToString(", ")
+//            binding.declension.text = declension.joinToString(", ")
+//            binding.synonyms.text = synonyms.joinToString(", ")
             binding.progressBarLearning.progress = learningProgress
 
             //todo fix Load image
@@ -79,7 +79,7 @@ class DetailsFragment : Fragment() {
                 .into(binding.ivWordImage)
 
             binding.ivTextToSpeech.setOnClickListener {
-                val wordToSpeak = word// Получите слово для озвучивания
+                val wordToSpeak = word
                 textToSpeechHelper.speak(wordToSpeak)
             }
         }

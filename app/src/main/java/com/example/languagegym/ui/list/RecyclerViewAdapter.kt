@@ -1,4 +1,4 @@
-package com.example.languagegym.ui.home
+package com.example.languagegym.ui.list
 
 import android.content.Context
 import android.view.LayoutInflater

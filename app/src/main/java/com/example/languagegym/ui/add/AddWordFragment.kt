@@ -13,9 +13,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.languagegym.helpers.DictionaryDatabaseHelper
 import com.example.languagegym.model.WordModel
 import com.example.languagegym.databinding.FragmentAddWordBinding
+import com.example.languagegym.model.WordDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -26,14 +26,13 @@ class AddWordFragment : Fragment() {
         fun onWordAdded()
     }
 
-
     private lateinit var ivImagePicker: ImageView
     private var imageUri: Uri? = null
     private val REQUEST_IMAGE_GALLERY: Int = 100
     var onWordAddedListener: OnWordAddedListener? = null
     private var _binding: FragmentAddWordBinding? = null
     private val binding get() = _binding!!
-
+    private lateinit var wordDao: WordDao
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,61 +66,65 @@ class AddWordFragment : Fragment() {
             val wordModelArg = arguments?.getParcelable<WordModel>("word")
 
             if (wordModelArg != null) {
-
-                val updatedWord = WordModel(
-                    word = word,
-                    translation = translation,
-                    partOfSpeech = partOfSpeech,
-
-                )
-
-                val dbHelper = DictionaryDatabaseHelper(requireContext())
-                GlobalScope.launch(Dispatchers.IO) {
-                    //todo fix update word
-                    dbHelper.updateWord(updatedWord)
-                }
-
-                Toast.makeText(requireContext(), "Word updated successfully", Toast.LENGTH_SHORT).show()
-
-                // Уведомить слушателя об обновлении слова
-                onWordAddedListener?.onWordAdded()
-
-                findNavController().navigateUp()
+                updateWord(wordModelArg, word, translation, partOfSpeech)
             } else {
-                // Если аргументы отсутствуют, значит это добавление нового слова
-
-
-                if (word.isNotEmpty() && translation.isNotEmpty()) {
-                    val newWord = WordModel(
-                        word = word,
-                        translation = translation,
-                        partOfSpeech = partOfSpeech,
-                        imageUrl = imageUri.toString()
-                    )
-
-                    val dbHelper = DictionaryDatabaseHelper(requireContext())
-                    GlobalScope.launch(Dispatchers.IO) {
-                        dbHelper.insertWord(newWord)
-                    }
-
-                    Toast.makeText(requireContext(), "Word added successfully", Toast.LENGTH_SHORT).show()
-
-                    // Уведомить слушателя о успешном добавлении слова
-                    onWordAddedListener?.onWordAdded()
-
-                    // Очистить поля ввода после добавления
-                    binding.etWord.text.clear()
-                    binding.etWord2.text.clear()
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Please enter word and translation",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                addNewWord(word, translation, partOfSpeech)
             }
         }
     }
+    private fun updateWord(
+        wordModel: WordModel,
+        word: String,
+        translation: String,
+        partOfSpeech: String
+    ) {
+        val updatedWord = wordModel.copy(
+            word = word,
+            translation = translation,
+            partOfSpeech = partOfSpeech
+        )
+
+        GlobalScope.launch(Dispatchers.IO) {
+            wordDao.updateWord(updatedWord)
+        }
+
+        Toast.makeText(requireContext(), "Word updated successfully", Toast.LENGTH_SHORT).show()
+
+        // Notify the listener to update the word
+        onWordAddedListener?.onWordAdded()
+
+        findNavController().navigateUp()
+    }
+
+    private fun addNewWord(word: String, translation: String, partOfSpeech: String) {
+        if (word.isNotEmpty() && translation.isNotEmpty()) {
+            val newWord = WordModel(
+                word = word,
+                translation = translation,
+                partOfSpeech = partOfSpeech,
+                imageUrl = imageUri.toString()
+            )
+
+            GlobalScope.launch(Dispatchers.IO) {
+                wordDao.insertWord(newWord)
+            }
+
+            Toast.makeText(requireContext(), "Word added successfully", Toast.LENGTH_SHORT).show()
+
+            // Notify the listener when the word was added successfully
+            onWordAddedListener?.onWordAdded()
+
+            binding.etWord.text.clear()
+            binding.etWord2.text.clear()
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "Please enter word and translation",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, REQUEST_IMAGE_GALLERY)

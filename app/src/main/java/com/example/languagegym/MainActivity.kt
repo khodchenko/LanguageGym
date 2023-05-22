@@ -15,19 +15,15 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.languagegym.helpers.DictionaryDatabaseHelper
 import com.example.languagegym.databinding.ActivityMainBinding
-import com.example.languagegym.ui.home.DetailsFragment
-import com.example.languagegym.ui.home.ListFragment
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.example.languagegym.ui.list.DetailsFragment
+import com.example.languagegym.ui.list.ListFragment
 
 class MainActivity : AppCompatActivity() {
 
     private val language: String = "EN"
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private lateinit var databaseHelper: DictionaryDatabaseHelper
     private var currentFragment: Fragment? = null
     private lateinit var filterSpinner: Spinner
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,11 +45,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        //words data base
-        databaseHelper = DictionaryDatabaseHelper(this)
-        GlobalScope.launch {
-            databaseHelper.writableDatabase
-        }
 
         supportFragmentManager.addOnBackStackChangedListener {
             currentFragment =
@@ -123,7 +114,7 @@ class MainActivity : AppCompatActivity() {
                 val listFragment =
                     supportFragmentManager.findFragmentByTag("HomeFragment") as? ListFragment
                 //TODO change this realization
-                listFragment?.loadWordsByFilter(partOfSpeech)
+               // listFragment?.loadWordsByFilter(partOfSpeech)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
