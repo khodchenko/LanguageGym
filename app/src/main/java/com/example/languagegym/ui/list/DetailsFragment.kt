@@ -9,10 +9,14 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.languagegym.R
 import com.example.languagegym.helpers.TextToSpeechHelper
-import com.example.languagegym.model.WordModel
+import com.example.languagegym.ui.model.WordModel
 import com.example.languagegym.databinding.FragmentDetailsBinding
-import com.example.languagegym.model.DictionaryDatabase
+import com.example.languagegym.ui.model.DictionaryDatabase
+import com.example.languagegym.ui.model.WordDao
 import com.example.languagegym.ui.add.AddWordFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class DetailsFragment : Fragment() {
@@ -20,7 +24,7 @@ class DetailsFragment : Fragment() {
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
     private var isEditMode = false
-    private lateinit var dbHelper: DictionaryDatabase
+    private lateinit var wordDao: WordDao
     private lateinit var textToSpeechHelper: TextToSpeechHelper
 
     override fun onCreateView(
@@ -29,7 +33,7 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-     //   dbHelper = DictionaryDatabase(requireContext())
+        wordDao = DictionaryDatabase.getInstance(requireContext()).wordDao()
         textToSpeechHelper = TextToSpeechHelper(requireContext())
         binding.editFab.setOnClickListener {
             toggleEditMode()
@@ -38,7 +42,9 @@ class DetailsFragment : Fragment() {
         binding.buttonWordDelete.setOnClickListener {
             val word = arguments?.getParcelable<WordModel>("word")
             if (word != null) {
-               // dbHelper.deleteWord(word)
+                GlobalScope.launch(Dispatchers.IO) {
+                    wordDao.deleteWord(word)
+                }
                 findNavController().navigateUp()
             }
         }

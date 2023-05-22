@@ -7,16 +7,17 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
+import com.example.languagegym.MainActivity
 import com.example.languagegym.R
-import com.example.languagegym.model.WordModel
+import com.example.languagegym.ui.model.WordModel
 import com.example.languagegym.databinding.FragmentListBinding
-import com.example.languagegym.model.DictionaryDatabase
-import com.example.languagegym.model.WordDao
+import com.example.languagegym.ui.model.DictionaryDatabase
+import com.example.languagegym.ui.model.WordDao
 import com.example.languagegym.ui.add.AddWordFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +34,6 @@ class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
     private lateinit var adapter: RecyclerViewAdapter
     private lateinit var wordDao: WordDao
     private lateinit var fab: FloatingActionButton
-    private lateinit var wordDatabase: DictionaryDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,12 +45,7 @@ class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
 
         setupRecyclerView()
 
-        wordDatabase = Room.databaseBuilder(
-            requireContext(),
-            DictionaryDatabase::class.java,
-            "dictionary_database"
-        ).build()
-        wordDao = wordDatabase.wordDao()
+        wordDao = DictionaryDatabase.getInstance(requireContext()).wordDao()
 
         setupSpinner()
 
@@ -60,10 +55,31 @@ class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
 
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadDataByFilter("All")
+
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.setContextToolbarButtonClickListener(View.OnClickListener {
+          showToast("ListFragment")
+            showPartOfSpeechFilterDialog()
+        })
+    }
+
+    private fun showPartOfSpeechFilterDialog() {
+        val filterOptions = arrayOf("Noun", "Verb", "Adjective", "Adverb")
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Filter by Part of Speech")
+            .setItems(filterOptions) { dialog, which ->
+                val partOfSpeech = filterOptions[which]
+                loadDataByFilter(partOfSpeech)
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+        val dialog = builder.create()
+        dialog.show()
     }
 
     private fun setupRecyclerView() {

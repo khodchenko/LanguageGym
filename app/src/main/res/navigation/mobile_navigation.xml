@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/categoryFragment">
+    app:startDestination="@id/startFragment">
 
     <fragment
         android:id="@+id/nav_home"
@@ -42,6 +42,10 @@
         android:id="@+id/startFragment"
         android:name="com.example.languagegym.ui.start.StartFragment"
         android:label="@string/StartFragmentHeader"
+        app:popEnterAnim="@anim/slide_in_right"
+        app:popExitAnim="@anim/slide_out_left"
+        app:enterAnim="@anim/slide_in_left"
+        app:exitAnim="@anim/slide_out_right"
         tools:layout="@layout/fragment_start">
         <action
             android:id="@+id/action_startFragment_to_categoryFragment"

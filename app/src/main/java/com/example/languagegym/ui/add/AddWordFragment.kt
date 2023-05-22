@@ -13,9 +13,10 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.languagegym.model.WordModel
+import com.example.languagegym.ui.model.WordModel
 import com.example.languagegym.databinding.FragmentAddWordBinding
-import com.example.languagegym.model.WordDao
+import com.example.languagegym.ui.model.DictionaryDatabase
+import com.example.languagegym.ui.model.WordDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -44,7 +45,7 @@ class AddWordFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        wordDao = DictionaryDatabase.getInstance(requireContext()).wordDao()
         ivImagePicker = binding.ivImagePicker
         binding.ivImagePicker.setOnClickListener {
             openGallery()
@@ -72,6 +73,7 @@ class AddWordFragment : Fragment() {
             }
         }
     }
+
     private fun updateWord(
         wordModel: WordModel,
         word: String,
@@ -81,7 +83,9 @@ class AddWordFragment : Fragment() {
         val updatedWord = wordModel.copy(
             word = word,
             translation = translation,
-            partOfSpeech = partOfSpeech
+            partOfSpeech = partOfSpeech,
+            imageUrl = imageUri.toString()
+
         )
 
         GlobalScope.launch(Dispatchers.IO) {

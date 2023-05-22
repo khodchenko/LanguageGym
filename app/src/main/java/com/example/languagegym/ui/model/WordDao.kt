@@ -1,4 +1,4 @@
-package com.example.languagegym.model
+package com.example.languagegym.ui.model
 
 import androidx.room.*
 

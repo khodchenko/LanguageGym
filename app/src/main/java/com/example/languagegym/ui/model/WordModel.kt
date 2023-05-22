@@ -1,4 +1,4 @@
-package com.example.languagegym.model
+package com.example.languagegym.ui.model
 
 import android.os.Parcel
 import android.os.Parcelable
