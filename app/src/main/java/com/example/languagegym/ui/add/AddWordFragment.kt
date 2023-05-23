@@ -13,10 +13,10 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.languagegym.ui.model.WordModel
+import com.example.languagegym.model.WordModel
 import com.example.languagegym.databinding.FragmentAddWordBinding
-import com.example.languagegym.ui.model.DictionaryDatabase
-import com.example.languagegym.ui.model.WordDao
+import com.example.languagegym.model.DictionaryDatabase
+import com.example.languagegym.model.WordDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

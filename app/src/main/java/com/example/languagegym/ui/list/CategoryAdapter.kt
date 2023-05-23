@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.example.languagegym.databinding.ItemCategoryBinding
-import com.example.languagegym.ui.model.CategoryModel
+import com.example.languagegym.model.CategoryModel
 
 class CategoryAdapter(private val context: Context, private val categories: List<CategoryModel>) :
     BaseAdapter() {

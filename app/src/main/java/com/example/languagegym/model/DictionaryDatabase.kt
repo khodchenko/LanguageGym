@@ -1,4 +1,4 @@
-package com.example.languagegym.ui.model
+package com.example.languagegym.model
 
 import android.content.Context
 import androidx.room.Database
