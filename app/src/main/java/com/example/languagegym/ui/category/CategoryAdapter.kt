@@ -1,4 +1,4 @@
-package com.example.languagegym.ui.list
+package com.example.languagegym.ui.category
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,6 +10,16 @@ import com.example.languagegym.model.CategoryModel
 
 class CategoryAdapter(private val context: Context, private val categories: List<CategoryModel>) :
     BaseAdapter() {
+
+    private var itemClickListener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onItemClick(category: CategoryModel)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.itemClickListener = listener
+    }
 
     override fun getCount(): Int {
         return categories.size
@@ -25,19 +35,26 @@ class CategoryAdapter(private val context: Context, private val categories: List
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val binding: ItemCategoryBinding
+        val rootView: View
 
         if (convertView == null) {
             val inflater = LayoutInflater.from(context)
             binding = ItemCategoryBinding.inflate(inflater, parent, false)
-            binding.root.tag = binding
+            rootView = binding.root
+            rootView.tag = binding
         } else {
-            binding = ItemCategoryBinding.inflate(LayoutInflater.from(context), parent, false)
+            binding = (convertView.tag as ItemCategoryBinding)
+            rootView = convertView
         }
 
         val category = categories[position]
         binding.categoryNameTextView.text = category.name
-        binding.categoryColorView.setBackgroundColor(category.categoryColor)
+        binding.llCategoryItem.setBackgroundColor(category.categoryColor)
 
-        return binding.root
+        rootView.setOnClickListener {
+            itemClickListener?.onItemClick(category)
+        }
+
+        return rootView
     }
 }

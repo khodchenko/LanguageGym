@@ -1,4 +1,4 @@
-package com.example.languagegym.ui.list
+package com.example.languagegym.ui.category
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.languagegym.model.CategoryModel
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.graphics.Color
 import android.widget.Toast
 import com.example.languagegym.databinding.DialogAddCategoryBinding
@@ -20,6 +19,7 @@ class CategoryFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val categories = mutableListOf<CategoryModel>()
+    private lateinit var categoryAdapter: CategoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +36,15 @@ class CategoryFragment : Fragment() {
         binding.btnAddCategory.setOnClickListener {
             showAddCategoryDialog()
         }
+
+        // Create an adapter for the GridView
+        categoryAdapter = CategoryAdapter(requireContext(), categories)
+        categoryAdapter.setOnItemClickListener(object : CategoryAdapter.OnItemClickListener {
+            override fun onItemClick(category: CategoryModel) {
+                Toast.makeText(requireContext(), category.name, Toast.LENGTH_SHORT).show()
+            }
+        })
+        binding.gridViewCategories.adapter = categoryAdapter
     }
 
     override fun onDestroyView() {
@@ -79,9 +88,8 @@ class CategoryFragment : Fragment() {
     }
 
     private fun updateCategoryList() {
-        // Create an adapter for the GridView
-        val adapter = CategoryAdapter(requireContext(), categories)
-        binding.gridViewCategories.adapter = adapter
+        categoryAdapter.notifyDataSetChanged()
+
     }
     private fun getColorFromUser(): Int {
         return Color.rgb((0..255).random(), (0..255).random(), (0..255).random())

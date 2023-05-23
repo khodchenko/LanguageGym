@@ -9,7 +9,11 @@
     app:cardCornerRadius="10dp"
     app:cardElevation="4dp">
 
+    <!-- TODO change to application color resource -->
     <LinearLayout
+        android:id="@+id/ll_category_item"
+
+        android:background="@color/purple_200"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -21,12 +25,6 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@android:color/black" />
-
-        <View
-            android:id="@+id/categoryColorView"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="16dp" />
 
     </LinearLayout>
 
