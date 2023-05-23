@@ -41,6 +41,7 @@ class CategoryFragment : Fragment() {
         categoryAdapter = CategoryAdapter(requireContext(), categories)
         categoryAdapter.setOnItemClickListener(object : CategoryAdapter.OnItemClickListener {
             override fun onItemClick(category: CategoryModel) {
+                //todo handle click on category
                 Toast.makeText(requireContext(), category.name, Toast.LENGTH_SHORT).show()
             }
         })
