@@ -9,8 +9,14 @@ import com.example.languagegym.model.CategoryModel
 import android.app.AlertDialog
 import android.graphics.Color
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.example.languagegym.databinding.DialogAddCategoryBinding
 import com.example.languagegym.databinding.FragmentCategoryBinding
+import com.example.languagegym.model.CategoryDao
+import com.example.languagegym.model.DictionaryDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class CategoryFragment : Fragment() {
@@ -20,6 +26,8 @@ class CategoryFragment : Fragment() {
 
     private val categories = mutableListOf<CategoryModel>()
     private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var categoryDao: CategoryDao
+    private lateinit var database: DictionaryDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +44,9 @@ class CategoryFragment : Fragment() {
         binding.btnAddCategory.setOnClickListener {
             showAddCategoryDialog()
         }
-
+        //create database instance
+        database = DictionaryDatabase.getInstance(requireContext())
+        categoryDao = database.categoryDao()
         // Create an adapter for the GridView
         categoryAdapter = CategoryAdapter(requireContext(), categories)
         categoryAdapter.setOnItemClickListener(object : CategoryAdapter.OnItemClickListener {
@@ -65,10 +75,15 @@ class CategoryFragment : Fragment() {
                 if (categoryName.isNotEmpty()) {
                     val categoryColor = getColorFromUser()
                     val category =
-                        CategoryModel(id = id, categoryName, categoryColor, mutableListOf())
+                        CategoryModel(name = categoryName, categoryColor = categoryColor)
                     categories.add(category)
-                    Toast.makeText(requireContext(), "Category created!", Toast.LENGTH_SHORT).show()
 
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            categoryDao.insertCategory(category)
+                    }}
+
+                    Toast.makeText(requireContext(), "Category created!", Toast.LENGTH_SHORT).show()
                     // Update the UI with the new category
                     updateCategoryList()
 
@@ -87,10 +102,17 @@ class CategoryFragment : Fragment() {
             .create()
             .show()
     }
-
+    //todo fix refreshing ui
     private fun updateCategoryList() {
-        categoryAdapter.notifyDataSetChanged()
+        lifecycleScope.launch {
+            val categories = withContext(Dispatchers.IO) {
+                categoryDao.getAllCategories()
+            }
 
+            this@CategoryFragment.categories.clear()
+            this@CategoryFragment.categories.addAll(categories)
+            categoryAdapter.notifyDataSetChanged()
+        }
     }
     private fun getColorFromUser(): Int {
         return Color.rgb((0..255).random(), (0..255).random(), (0..255).random())

@@ -18,7 +18,10 @@ interface CategoryDao {
     @Delete
     fun deleteCategory(category: CategoryModel): Int
 
-    @Transaction
-    @Query("SELECT * FROM category")
-    suspend fun getCategoriesWithWords(): List<CategoryWithWords>
+    @Query("SELECT * FROM category ORDER BY name ASC")
+    fun getAllCategories(): List<CategoryModel>
+
+//    @Transaction
+//    @Query("SELECT * FROM category")
+//    suspend fun getCategoriesWithWords(): List<WordModel>
 }
