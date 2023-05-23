@@ -74,7 +74,7 @@ class RecyclerViewAdapter(
             }
 
             binding.ivTextToSpeech.setOnClickListener {
-                val wordToSpeak = word.word // Получите слово для озвучивания
+                val wordToSpeak = word.word
                 textToSpeechHelper.speak(wordToSpeak)
             }
         }

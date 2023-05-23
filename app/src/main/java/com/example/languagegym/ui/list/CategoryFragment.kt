@@ -50,11 +50,12 @@ class CategoryFragment : Fragment() {
 
         dialogBuilder.setView(dialogViewBinding.root)
             .setTitle("Create Category")
-            .setPositiveButton("Create", DialogInterface.OnClickListener { dialog, _ ->
+            .setPositiveButton("Create") { dialog, _ ->
                 val categoryName = etCategoryName.text.toString()
                 if (categoryName.isNotEmpty()) {
                     val categoryColor = getColorFromUser()
-                    val category = CategoryModel(categoryName, categoryColor, mutableListOf())
+                    val category =
+                        CategoryModel(id = id, categoryName, categoryColor, mutableListOf())
                     categories.add(category)
                     Toast.makeText(requireContext(), "Category created!", Toast.LENGTH_SHORT).show()
 
@@ -62,13 +63,17 @@ class CategoryFragment : Fragment() {
                     updateCategoryList()
 
                 } else {
-                    Toast.makeText(requireContext(), "Please enter a category name", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter a category name",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 dialog.dismiss()
-            })
-            .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, _ ->
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
-            })
+            }
             .create()
             .show()
     }
@@ -79,10 +84,6 @@ class CategoryFragment : Fragment() {
         binding.gridViewCategories.adapter = adapter
     }
     private fun getColorFromUser(): Int {
-        // Реализуйте метод для получения цвета от пользователя.
-        // Например, можно использовать AlertDialog с палитрой цветов или другую подходящую реализацию.
-        // Возвращайте выбранный цвет в формате Color.INT
-        // В данном примере возвращается случайный цвет
         return Color.rgb((0..255).random(), (0..255).random(), (0..255).random())
     }
 }

@@ -65,7 +65,7 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        val wordToBind: WordModel? = arguments?.getParcelable<WordModel>("word")
+        val wordToBind: WordModel? = arguments?.getParcelable("word")
 
         // Bind word data to view
         wordToBind?.run {

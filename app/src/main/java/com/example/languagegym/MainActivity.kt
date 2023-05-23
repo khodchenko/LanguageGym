@@ -18,10 +18,9 @@ import com.example.languagegym.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private val language: String = "EN"
+    //private val language: String = "EN"
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private var currentFragment: Fragment? = null
     private lateinit var filterSpinner: Spinner
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

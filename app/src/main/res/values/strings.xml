@@ -29,5 +29,6 @@
     <string name="AddWordFragmentHeader">Add new word</string>
     <string name="StartFragmentHeader">VOCABUL</string>
     <string name="DetailsFragmentHeader">Detail word info</string>
+    <string name="text_to_speech">text to speech</string>
 
 </resources>

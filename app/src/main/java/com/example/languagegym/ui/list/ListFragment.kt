@@ -59,10 +59,10 @@ class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
         super.onViewCreated(view, savedInstanceState)
 
         val mainActivity = requireActivity() as MainActivity
-        mainActivity.setContextToolbarButtonClickListener(View.OnClickListener {
-          showToast("ListFragment")
+        mainActivity.setContextToolbarButtonClickListener {
+            showToast("ListFragment")
             showPartOfSpeechFilterDialog()
-        })
+        }
     }
 
     private fun showPartOfSpeechFilterDialog() {

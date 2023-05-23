@@ -21,7 +21,7 @@ class StartFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                // Перехватываем нажатие кнопки "Назад"
+                // the back button pressed
                 true
             }
             else -> super.onOptionsItemSelected(item)

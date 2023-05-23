@@ -38,7 +38,7 @@ class AddWordFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddWordBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -62,7 +62,7 @@ class AddWordFragment : Fragment() {
             //todo change it to default category
             val partOfSpeech = binding.spinnerPos.selectedItem?.toString() ?: ""
             //todo make realization
-            val category = binding.spinnerCategory.selectedItem?.toString() ?: ""
+           // val category = binding.spinnerCategory.selectedItem?.toString() ?: ""
 
             val wordModelArg = arguments?.getParcelable<WordModel>("word")
 
