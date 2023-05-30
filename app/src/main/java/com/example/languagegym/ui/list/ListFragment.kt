@@ -16,6 +16,7 @@ import com.example.languagegym.MainActivity
 import com.example.languagegym.R
 import com.example.languagegym.model.WordModel
 import com.example.languagegym.databinding.FragmentListBinding
+import com.example.languagegym.model.CategoryDao
 import com.example.languagegym.model.DictionaryDatabase
 import com.example.languagegym.model.WordDao
 import com.example.languagegym.ui.add.AddWordFragment
@@ -33,6 +34,7 @@ class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RecyclerViewAdapter
     private lateinit var wordDao: WordDao
+    private lateinit var categoryDao: CategoryDao
     private lateinit var fab: FloatingActionButton
 
     override fun onCreateView(
@@ -43,6 +45,10 @@ class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
         recyclerView = binding.recyclerView
         fab = binding.fab
 
+        val categoryId = arguments?.getInt("categoryId", -1)
+        if (categoryId != null && categoryId != -1) {
+            //todo Используйте категорию по вашему усмотрению
+        }
         setupRecyclerView()
 
         wordDao = DictionaryDatabase.getInstance(requireContext()).wordDao()

@@ -3,7 +3,6 @@ package com.example.languagegym.model
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.*
-
 @Entity(tableName = "word")
 data class WordModel(
     @PrimaryKey(autoGenerate = true)
@@ -13,8 +12,6 @@ data class WordModel(
     @ColumnInfo(name = "part_of_speech")
     val partOfSpeech: String = "",
     val gender: String = "",
-//    val declension: List<String> = emptyList(),
-//    val synonyms: List<String> = emptyList(),
     @ColumnInfo(name = "image_url")
     val imageUrl: String = "",
     @ColumnInfo(name = "learning_progress")
@@ -26,8 +23,6 @@ data class WordModel(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
-//        parcel.createStringArrayList() ?: emptyList(),
-//        parcel.createStringArrayList() ?: emptyList(),
         parcel.readString() ?: "",
         parcel.readInt()
     )
@@ -38,8 +33,6 @@ data class WordModel(
         parcel.writeString(translation)
         parcel.writeString(partOfSpeech)
         parcel.writeString(gender)
-//        parcel.writeStringList(declension)
-//        parcel.writeStringList(synonyms)
         parcel.writeString(imageUrl)
         parcel.writeInt(learningProgress)
     }

@@ -10,10 +10,13 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation.findNavController
+import com.example.languagegym.R
 import com.example.languagegym.databinding.DialogAddCategoryBinding
 import com.example.languagegym.databinding.FragmentCategoryBinding
 import com.example.languagegym.model.CategoryDao
 import com.example.languagegym.model.DictionaryDatabase
+import com.example.languagegym.ui.list.ListFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -47,15 +50,28 @@ class CategoryFragment : Fragment() {
         //create database instance
         database = DictionaryDatabase.getInstance(requireContext())
         categoryDao = database.categoryDao()
+
         // Create an adapter for the GridView
         categoryAdapter = CategoryAdapter(requireContext(), categories)
         categoryAdapter.setOnItemClickListener(object : CategoryAdapter.OnItemClickListener {
             override fun onItemClick(category: CategoryModel) {
-                //todo handle click on category
+                    openCategoryFragment(category.id)
                 Toast.makeText(requireContext(), category.name, Toast.LENGTH_SHORT).show()
             }
         })
         binding.gridViewCategories.adapter = categoryAdapter
+    }
+
+    private fun openCategoryFragment(categoryId: Int) {
+        val wordListFragment = ListFragment()
+        val bundle = Bundle().apply {
+            putInt("categoryId", categoryId)
+        }
+        wordListFragment.arguments = bundle
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.nav_host_fragment_content_main, wordListFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onDestroyView() {
