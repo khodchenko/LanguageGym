@@ -6,7 +6,7 @@
     app:startDestination="@id/categoryFragment">
 
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_list"
         android:name="com.example.languagegym.ui.list.ListFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_list">
@@ -14,7 +14,7 @@
             android:id="@+id/action_nav_home_to_detailsFragment"
             app:destination="@id/nav_details" />
         <action
-            android:id="@+id/action_nav_home_to_addWordFragment"
+            android:id="@+id/action_nav_list_to_addWordFragment"
             app:destination="@id/addWordFragment" />
     </fragment>
 
@@ -64,8 +64,8 @@
         android:label="CategoryFragment"
         tools:layout="@layout/fragment_category">
         <action
-            android:id="@+id/action_categoryFragment_to_nav_home"
-            app:destination="@id/nav_home" />
+            android:id="@+id/action_categoryFragment_to_nav_list"
+            app:destination="@id/nav_list" />
     </fragment>
 
 

@@ -20,4 +20,12 @@ interface CategoryDao {
 
     @Query("SELECT * FROM category ORDER BY name ASC")
     fun getAllCategories(): List<CategoryModel>
+
+    @Transaction
+    @Query("SELECT * FROM category")
+    fun getCategoriesWithWords(): List<CategoryWithWords>
+
+    @Transaction
+    @Query("SELECT * FROM word")
+    fun getAllWordsFromCategories(): List<WordModel>
 }

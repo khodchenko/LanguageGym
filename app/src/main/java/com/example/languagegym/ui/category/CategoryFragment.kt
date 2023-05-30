@@ -10,7 +10,7 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.languagegym.R
 import com.example.languagegym.databinding.DialogAddCategoryBinding
 import com.example.languagegym.databinding.FragmentCategoryBinding
@@ -47,7 +47,7 @@ class CategoryFragment : Fragment() {
         binding.btnAddCategory.setOnClickListener {
             showAddCategoryDialog()
         }
-        //create database instance
+        //Initialize the database and DAO
         database = DictionaryDatabase.getInstance(requireContext())
         categoryDao = database.categoryDao()
 
@@ -55,23 +55,23 @@ class CategoryFragment : Fragment() {
         categoryAdapter = CategoryAdapter(requireContext(), categories)
         categoryAdapter.setOnItemClickListener(object : CategoryAdapter.OnItemClickListener {
             override fun onItemClick(category: CategoryModel) {
-                    openCategoryFragment(category.id)
+                    openCategoryFragment(category.categoryId)
                 Toast.makeText(requireContext(), category.name, Toast.LENGTH_SHORT).show()
             }
         })
         binding.gridViewCategories.adapter = categoryAdapter
+        // Update the category list to display the current data from the database
+        updateCategoryList()
     }
 
     private fun openCategoryFragment(categoryId: Int) {
+        //todo add bundle
         val wordListFragment = ListFragment()
         val bundle = Bundle().apply {
             putInt("categoryId", categoryId)
         }
         wordListFragment.arguments = bundle
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.nav_host_fragment_content_main, wordListFragment)
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.action_categoryFragment_to_nav_list)
     }
 
     override fun onDestroyView() {

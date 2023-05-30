@@ -143,7 +143,7 @@ class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
             try {
                 val words = withContext(Dispatchers.IO) {
                     if (filter == "All") {
-                        wordDao.getAllWords()
+                        categoryDao.getAllWordsFromCategories()
                     } else {
                         wordDao.getWordsByPartOfSpeech(filter)
                     }
@@ -164,7 +164,7 @@ class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
     private fun navigateToAddWordFragment() {
         val addWordFragment = AddWordFragment()
         addWordFragment.onWordAddedListener = this
-        findNavController().navigate(R.id.action_nav_home_to_addWordFragment)
+        findNavController().navigate(R.id.action_nav_list_to_addWordFragment)
     }
 
     private fun navigateToDetailsFragment(word: WordModel) {
