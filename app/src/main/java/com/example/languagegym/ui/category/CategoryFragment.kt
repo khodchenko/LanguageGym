@@ -65,13 +65,12 @@ class CategoryFragment : Fragment() {
     }
 
     private fun openCategoryFragment(categoryId: Int) {
-        //todo add bundle
         val wordListFragment = ListFragment()
         val bundle = Bundle().apply {
             putInt("categoryId", categoryId)
         }
         wordListFragment.arguments = bundle
-        findNavController().navigate(R.id.action_categoryFragment_to_nav_list)
+        findNavController().navigate(R.id.action_categoryFragment_to_nav_list, bundle)
     }
 
     override fun onDestroyView() {
@@ -118,7 +117,7 @@ class CategoryFragment : Fragment() {
             .create()
             .show()
     }
-    //todo fix refreshing ui
+
     private fun updateCategoryList() {
         lifecycleScope.launch {
             val categories = withContext(Dispatchers.IO) {

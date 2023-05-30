@@ -29,6 +29,7 @@ class RecyclerViewAdapter(
         val binding = RecyclerviewItemBinding.inflate(LayoutInflater.from(context), parent, false)
         return WordViewHolder(binding, listener)
     }
+
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         val word = words[position]
         holder.bind(word)
@@ -37,6 +38,7 @@ class RecyclerViewAdapter(
     override fun getItemCount(): Int {
         return words.size
     }
+
     fun updateData(words: List<WordModel>) {
         this.words = words
         notifyDataSetChanged()
@@ -61,11 +63,9 @@ class RecyclerViewAdapter(
             binding.genderTextview.text = word.gender
             binding.progressBarLearning.progress = word.learningProgress
             if (word.imageUrl == "") {
-                //todo fix hiding image view when there is no uri in data
                 binding.wordImage.visibility = View.INVISIBLE
-                //binding.wordImage.setImageResource(R.drawable.ic_error)
-                //binding.wordImage.setColorFilter(Color.GRAY)
             } else {
+                binding.wordImage.visibility = View.VISIBLE
                 Glide.with(context)
                     .load(word.imageUrl)
                     .placeholder(R.drawable.ic_menu_camera)

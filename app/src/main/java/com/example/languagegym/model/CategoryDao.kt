@@ -28,4 +28,9 @@ interface CategoryDao {
     @Transaction
     @Query("SELECT * FROM word")
     fun getAllWordsFromCategories(): List<WordModel>
+
+    @Transaction
+    @Query("SELECT * FROM category WHERE categoryId = :categoryId")
+    fun getCategoryWithWords(categoryId: Int): CategoryWithWords
+
 }

@@ -49,6 +49,7 @@ class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
         if (categoryId != null && categoryId != -1) {
             //todo Используйте категорию по вашему усмотрению
         }
+
         setupRecyclerView()
 
         wordDao = DictionaryDatabase.getInstance(requireContext()).wordDao()
@@ -138,17 +139,13 @@ class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
         }
     }
 
+    //todo fix or remove filter
     private fun loadDataByFilter(filter: String) {
         GlobalScope.launch(Dispatchers.Main) {
             try {
-                val words = withContext(Dispatchers.IO) {
-                    if (filter == "All") {
-                        categoryDao.getAllWordsFromCategories()
-                    } else {
-                        wordDao.getWordsByPartOfSpeech(filter)
-                    }
-                }
-                updateRecyclerView(words)
+                val categoryId = arguments?.getInt("categoryId")
+
+                updateRecyclerView(categoryDao.getCategoryWithWords(categoryId?.toInt() ?: -1).wordModels)
                 fab.show()
                 showToast("Words loaded successfully")
             } catch (e: Exception) {
