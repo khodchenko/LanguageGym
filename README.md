@@ -1,7 +1,7 @@
 # Language Trainer & Dictionary
 Local libraries: 
 
--SQLite
+-Room
 
 Outsource libraries: 
 
