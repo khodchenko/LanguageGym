@@ -14,10 +14,10 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.languagegym.model.WordModel
+import com.example.languagegym.data.model.WordModel
 import com.example.languagegym.databinding.FragmentAddWordBinding
-import com.example.languagegym.model.DictionaryDatabase
-import com.example.languagegym.model.WordDao
+import com.example.languagegym.data.model.DictionaryDatabase
+import com.example.languagegym.data.model.WordDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

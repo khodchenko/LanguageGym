@@ -1,4 +1,4 @@
-package com.example.languagegym.model
+package com.example.languagegym.data.model
 
 import androidx.room.Embedded
 import androidx.room.Relation

@@ -50,6 +50,9 @@
         <action
             android:id="@+id/action_splashFragment_to_categoryFragment"
             app:destination="@id/categoryFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/addWordFragment"
@@ -66,6 +69,15 @@
         <action
             android:id="@+id/action_categoryFragment_to_nav_list"
             app:destination="@id/nav_list" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.languagegym.ui.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
     </fragment>
 
 

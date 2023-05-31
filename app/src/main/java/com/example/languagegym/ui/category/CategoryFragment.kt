@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.languagegym.model.CategoryModel
+import com.example.languagegym.data.model.CategoryModel
 import android.app.AlertDialog
 import android.graphics.Color
 import android.widget.Toast
@@ -14,8 +14,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.languagegym.R
 import com.example.languagegym.databinding.DialogAddCategoryBinding
 import com.example.languagegym.databinding.FragmentCategoryBinding
-import com.example.languagegym.model.CategoryDao
-import com.example.languagegym.model.DictionaryDatabase
+import com.example.languagegym.data.model.CategoryDao
+import com.example.languagegym.data.model.DictionaryDatabase
 import com.example.languagegym.ui.list.ListFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -14,17 +14,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.languagegym.MainActivity
 import com.example.languagegym.R
-import com.example.languagegym.model.WordModel
+import com.example.languagegym.data.model.WordModel
 import com.example.languagegym.databinding.FragmentListBinding
-import com.example.languagegym.model.CategoryDao
-import com.example.languagegym.model.DictionaryDatabase
-import com.example.languagegym.model.WordDao
+import com.example.languagegym.data.model.CategoryDao
+import com.example.languagegym.data.model.DictionaryDatabase
+import com.example.languagegym.data.model.WordDao
 import com.example.languagegym.ui.add.AddWordFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ListFragment : Fragment(), AddWordFragment.OnWordAddedListener {
 

@@ -1,4 +1,4 @@
-package com.example.languagegym.model
+package com.example.languagegym.data.model
 
 import androidx.room.Dao
 import androidx.room.Delete
