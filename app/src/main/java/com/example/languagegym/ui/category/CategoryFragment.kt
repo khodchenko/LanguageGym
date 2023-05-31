@@ -40,7 +40,6 @@ class CategoryFragment : Fragment() {
         _binding = FragmentCategoryBinding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -53,12 +52,22 @@ class CategoryFragment : Fragment() {
 
         // Create an adapter for the GridView
         categoryAdapter = CategoryAdapter(requireContext(), categories)
+
         categoryAdapter.setOnItemClickListener(object : CategoryAdapter.OnItemClickListener {
             override fun onItemClick(category: CategoryModel) {
-                    openCategoryFragment(category.categoryId)
+                openCategoryFragment(category.categoryId)
                 Toast.makeText(requireContext(), category.name, Toast.LENGTH_SHORT).show()
             }
         })
+
+        categoryAdapter.setOnItemLongClickListener(object : CategoryAdapter.OnItemLongClickListener {
+            override fun onItemLongClick(category: CategoryModel): Boolean {
+                //todo long pressed
+                Toast.makeText(requireContext(), "LONG_PRESSED", Toast.LENGTH_SHORT).show()
+                return true //Return true if long press handled, otherwise return false
+            }
+        })
+
         binding.gridViewCategories.adapter = categoryAdapter
         // Update the category list to display the current data from the database
         updateCategoryList()
@@ -130,6 +139,7 @@ class CategoryFragment : Fragment() {
         }
     }
     private fun getColorFromUser(): Int {
+        //todo fix to user input
         return Color.rgb((0..255).random(), (0..255).random(), (0..255).random())
     }
 }

@@ -12,13 +12,22 @@ class CategoryAdapter(private val context: Context, private val categories: List
     BaseAdapter() {
 
     private var itemClickListener: OnItemClickListener? = null
+    private var itemLongClickListener: OnItemLongClickListener? = null
 
     interface OnItemClickListener {
         fun onItemClick(category: CategoryModel)
     }
 
+    interface OnItemLongClickListener {
+        fun onItemLongClick(category: CategoryModel): Boolean
+    }
+
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.itemClickListener = listener
+    }
+
+    fun setOnItemLongClickListener(listener: OnItemLongClickListener) {
+        this.itemLongClickListener = listener
     }
 
     override fun getCount(): Int {
@@ -53,6 +62,10 @@ class CategoryAdapter(private val context: Context, private val categories: List
 
         rootView.setOnClickListener {
             itemClickListener?.onItemClick(category)
+        }
+
+        rootView.setOnLongClickListener {
+            itemLongClickListener?.onItemLongClick(category) ?: false
         }
 
         return rootView
