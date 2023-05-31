@@ -7,7 +7,7 @@
     <string name="nav_header_desc">VOCABUL</string>
     <string name="action_settings">Settings</string>
     <!-- Fragments -->
-    <string name="menu_home">Home</string>
+    <string name="menu_list">List</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_details">Details</string>
@@ -27,7 +27,7 @@
     <string name="application_name">VOCABUL</string>
     <string name="filter_words">filter_words</string>
     <string name="AddWordFragmentHeader">Add new word</string>
-    <string name="StartFragmentHeader">VOCABUL</string>
+    <string name="SplashFragmentHeader">VOCABUL</string>
     <string name="DetailsFragmentHeader">Detail word info</string>
     <string name="text_to_speech">text to speech</string>
 

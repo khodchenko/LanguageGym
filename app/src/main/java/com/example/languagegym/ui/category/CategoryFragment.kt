@@ -40,6 +40,7 @@ class CategoryFragment : Fragment() {
         _binding = FragmentCategoryBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -56,13 +57,14 @@ class CategoryFragment : Fragment() {
         categoryAdapter.setOnItemClickListener(object : CategoryAdapter.OnItemClickListener {
             override fun onItemClick(category: CategoryModel) {
                 openCategoryFragment(category.categoryId)
-                Toast.makeText(requireContext(), category.name, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(requireContext(), category.name, Toast.LENGTH_SHORT).show()
             }
         })
 
-        categoryAdapter.setOnItemLongClickListener(object : CategoryAdapter.OnItemLongClickListener {
+        categoryAdapter.setOnItemLongClickListener(object :
+            CategoryAdapter.OnItemLongClickListener {
             override fun onItemLongClick(category: CategoryModel): Boolean {
-                //todo long pressed
+                deleteCategory(category, categoryDao)
                 Toast.makeText(requireContext(), "LONG_PRESSED", Toast.LENGTH_SHORT).show()
                 return true //Return true if long press handled, otherwise return false
             }
@@ -82,9 +84,13 @@ class CategoryFragment : Fragment() {
         findNavController().navigate(R.id.action_categoryFragment_to_nav_list, bundle)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun deleteCategory(category: CategoryModel, categoryDao: CategoryDao) {
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                categoryDao.deleteCategory(category)
+            }
+        }
+        updateCategoryList()
     }
 
     private fun showAddCategoryDialog() {
@@ -105,7 +111,9 @@ class CategoryFragment : Fragment() {
                     lifecycleScope.launch {
                         withContext(Dispatchers.IO) {
                             categoryDao.insertCategory(category)
-                    }}
+                        }
+                        updateCategoryList()
+                    }
 
                     Toast.makeText(requireContext(), "Category created!", Toast.LENGTH_SHORT).show()
                     // Update the UI with the new category
@@ -138,8 +146,14 @@ class CategoryFragment : Fragment() {
             categoryAdapter.notifyDataSetChanged()
         }
     }
+
     private fun getColorFromUser(): Int {
         //todo fix to user input
         return Color.rgb((0..255).random(), (0..255).random(), (0..255).random())
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

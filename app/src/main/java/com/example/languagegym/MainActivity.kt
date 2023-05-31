@@ -57,4 +57,12 @@ class MainActivity : AppCompatActivity() {
     fun setContextToolbarButtonClickListener(listener: View.OnClickListener?) {
         binding.appBarMain.contextToolbarButton.setOnClickListener(listener)
     }
+
+    fun setToolbarVisibility(visible: Boolean) {
+        if (visible) {
+            supportActionBar?.show()
+        } else {
+            supportActionBar?.hide()
+        }
+    }
 }

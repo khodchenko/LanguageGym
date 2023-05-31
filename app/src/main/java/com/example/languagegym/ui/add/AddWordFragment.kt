@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.languagegym.model.WordModel
@@ -18,8 +19,8 @@ import com.example.languagegym.databinding.FragmentAddWordBinding
 import com.example.languagegym.model.DictionaryDatabase
 import com.example.languagegym.model.WordDao
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddWordFragment : Fragment() {
 
@@ -87,11 +88,11 @@ class AddWordFragment : Fragment() {
             imageUrl = imageUri.toString()
 
         )
-
-        GlobalScope.launch(Dispatchers.IO) {
-            wordDao.updateWord(updatedWord)
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO)  {
+                wordDao.updateWord(updatedWord)
+            }
         }
-
         Toast.makeText(requireContext(), "Word updated successfully", Toast.LENGTH_SHORT).show()
 
         // Notify the listener to update the word
@@ -109,8 +110,10 @@ class AddWordFragment : Fragment() {
                 imageUrl = imageUri.toString()
             )
 
-            GlobalScope.launch(Dispatchers.IO) {
-                wordDao.insertWord(newWord)
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO)  {
+                    wordDao.insertWord(newWord)
+                }
             }
 
             Toast.makeText(requireContext(), "Word added successfully", Toast.LENGTH_SHORT).show()

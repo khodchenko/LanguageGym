@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/categoryFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/nav_list"
         android:name="com.example.languagegym.ui.list.ListFragment"
-        android:label="@string/menu_home"
+        android:label="@string/menu_list"
         tools:layout="@layout/fragment_list">
         <action
             android:id="@+id/action_nav_home_to_detailsFragment"
@@ -39,16 +39,16 @@
             app:destination="@id/addWordFragment" />
     </fragment>
     <fragment
-        android:id="@+id/startFragment"
-        android:name="com.example.languagegym.ui.start.StartFragment"
-        android:label="@string/StartFragmentHeader"
+        android:id="@+id/splashFragment"
+        android:name="com.example.languagegym.ui.start.SplashFragment"
+        android:label="@string/SplashFragmentHeader"
         app:popEnterAnim="@anim/slide_in_right"
         app:popExitAnim="@anim/slide_out_left"
         app:enterAnim="@anim/slide_in_left"
         app:exitAnim="@anim/slide_out_right"
-        tools:layout="@layout/fragment_start">
+        tools:layout="@layout/fragment_splash">
         <action
-            android:id="@+id/action_startFragment_to_categoryFragment"
+            android:id="@+id/action_splashFragment_to_categoryFragment"
             app:destination="@id/categoryFragment" />
     </fragment>
     <fragment

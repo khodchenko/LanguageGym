@@ -5,7 +5,7 @@ import android.view.View
 
 class UniversalTouchListener : View.OnTouchListener {
     private var clickStartTime: Long = 0
-    private var longClickDuration: Long = 500 // Длительность для определения долгого нажатия (в миллисекундах)
+    private var longClickDuration: Long = 500
     private var clickListener: OnClickListener? = null
     private var longClickListener: OnLongClickListener? = null
 

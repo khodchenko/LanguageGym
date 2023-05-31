@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
     </style>
 
     <style name="Theme.LanguageGym.NoActionBar">
@@ -23,8 +24,8 @@
 
     <style name="Theme.LanguageGym.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="FullscreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
+    <style name="FullscreenTheme" parent="Theme.LanguageGym">
+
+        <item name="windowActionBar">false</item>
     </style>
 </resources>
