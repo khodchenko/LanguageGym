@@ -3,26 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/nav_SplashFragment">
 
     <fragment
-        android:id="@+id/nav_list"
+        android:id="@+id/nav_ListFragment"
         android:name="com.example.languagegym.ui.list.ListFragment"
-        android:label="@string/menu_list"
+        android:label="@string/menu_home"
         tools:layout="@layout/fragment_list">
         <action
             android:id="@+id/action_nav_home_to_detailsFragment"
-            app:destination="@id/nav_details" />
+            app:destination="@id/nav_DetailsFragment" />
         <action
             android:id="@+id/action_nav_list_to_addWordFragment"
-            app:destination="@id/addWordFragment" />
+            app:destination="@id/nav_AddWordFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.languagegym.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_HomeFragment"
+        android:name="com.example.languagegym.ui.home.HomeFragment"
+        android:label="@string/menu_category"
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_slideshow"
@@ -30,16 +30,16 @@
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
     <fragment
-        android:id="@+id/nav_details"
+        android:id="@+id/nav_DetailsFragment"
         android:name="com.example.languagegym.ui.list.DetailsFragment"
         android:label="@string/DetailsFragmentHeader"
         tools:layout="@layout/fragment_details" >
         <action
             android:id="@+id/action_nav_details_to_addWordFragment"
-            app:destination="@id/addWordFragment" />
+            app:destination="@id/nav_AddWordFragment" />
     </fragment>
     <fragment
-        android:id="@+id/splashFragment"
+        android:id="@+id/nav_SplashFragment"
         android:name="com.example.languagegym.ui.start.SplashFragment"
         android:label="@string/SplashFragmentHeader"
         app:popEnterAnim="@anim/slide_in_right"
@@ -49,35 +49,35 @@
         tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_splashFragment_to_categoryFragment"
-            app:destination="@id/categoryFragment" />
+            app:destination="@id/nav_CategoryFragment" />
         <action
             android:id="@+id/action_splashFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/nav_LoginFragment" />
     </fragment>
     <fragment
-        android:id="@+id/addWordFragment"
+        android:id="@+id/nav_AddWordFragment"
         android:name="com.example.languagegym.ui.add.AddWordFragment"
         android:label="@string/AddWordFragmentHeader"
         tools:layout="@layout/fragment_add_word">
 
     </fragment>
     <fragment
-        android:id="@+id/categoryFragment"
+        android:id="@+id/nav_CategoryFragment"
         android:name="com.example.languagegym.ui.category.CategoryFragment"
         android:label="CategoryFragment"
         tools:layout="@layout/fragment_category">
         <action
             android:id="@+id/action_categoryFragment_to_nav_list"
-            app:destination="@id/nav_list" />
+            app:destination="@id/nav_ListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/loginFragment"
+        android:id="@+id/nav_LoginFragment"
         android:name="com.example.languagegym.ui.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_categoryFragment"
-            app:destination="@id/categoryFragment" />
+            app:destination="@id/nav_CategoryFragment" />
     </fragment>
 
 

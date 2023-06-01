@@ -7,8 +7,8 @@
     <string name="nav_header_desc">VOCABUL</string>
     <string name="action_settings">Settings</string>
     <!-- Fragments -->
-    <string name="menu_list">List</string>
-    <string name="menu_gallery">Gallery</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_category">Category</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_details">Details</string>
     <!-- Other -->
@@ -40,5 +40,13 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="action_sign_in_with_google">Log in with google</string>
+    <string name="tv_home_header">Welcome again!</string>
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+    <string name="sun">Sun</string>
 
 </resources>
